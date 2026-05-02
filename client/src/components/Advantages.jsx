@@ -4,6 +4,8 @@ const Advantages = () => {
       icon: "📍",
       title: "Зручне розташування у Стрию",
       desc: "КДЦ знаходиться за адресою вул. Незалежності, 17 — легко знайти та швидко зайти",
+      mapLink:
+        "https://www.google.com/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%9D%D0%B5%D0%B7%D0%B0%D0%BB%D0%B5%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%96,+17,+%D0%A1%D1%82%D1%80%D0%B8%D0%B9,+%D0%9B%D1%8C%D0%B2%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+82400/@49.2571841,23.8513239,17z/data=!3m1!4b1!4m6!3m5!1s0x473a6a1de83f0809:0x5ab07ad278586a9b!8m2!3d49.2571841!4d23.8513239!16s%2Fg%2F11c884180b?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D",
     },
     {
       icon: "⚡",
@@ -32,12 +34,19 @@ const Advantages = () => {
     },
   ];
 
-  return (
-    <section className="relative py-24 bg-white overflow-hidden scroll-mt-25" id="about">
+  const handleCardClick = (adv) => {
+    if (adv.mapLink) {
+      window.open(adv.mapLink, "_blank");
+    }
+  };
 
+  return (
+    <section
+      className="relative py-24 bg-white overflow-hidden scroll-mt-25"
+      id="about"
+    >
       {/* ===== BACKGROUND LINES ===== */}
       <div className="absolute inset-0 pointer-events-none z-0">
-
         {/* left flowing line */}
         <svg
           className="absolute -left-60 top-0 w-[600px] opacity-20 animate-[flow_20s_linear_infinite]"
@@ -76,18 +85,16 @@ const Advantages = () => {
             strokeWidth="2"
           />
         </svg>
-
       </div>
 
       {/* ===== CONTENT ===== */}
       <div className="relative z-10 max-w-6xl mx-auto px-4">
-
         {/* HEADER */}
         <div className="text-center mb-14">
           <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
 
           <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-[#1F2933]">
-            Чому обирають <span className="text-[#FFC400]">КДЦ</span>
+            Чому обирають <span className="text-[#FFC400]">КДЦ ТЕХНОМАКС</span>
           </h2>
 
           <p className="text-gray-500 mt-2 font-[Inter]">
@@ -97,11 +104,13 @@ const Advantages = () => {
 
         {/* GRID */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {advantages.map((adv, i) => (
             <div
               key={i}
-              className="group border border-gray-200 rounded-2xl p-6 bg-white hover:border-[#FFC400] hover:shadow-lg transition-all duration-300"
+              onClick={() => handleCardClick(adv)}
+              className={`group border border-gray-200 rounded-2xl p-6 bg-white hover:border-[#FFC400] hover:shadow-lg transition-all duration-300 ${
+                adv.mapLink ? "cursor-pointer" : ""
+              }`}
             >
               <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">
                 {adv.icon}
@@ -111,37 +120,50 @@ const Advantages = () => {
                 {adv.title}
               </h3>
 
-              <p className="text-gray-500 text-sm font-[Inter]">
-                {adv.desc}
-              </p>
+              <p className="text-gray-500 text-sm font-[Inter]">{adv.desc}</p>
             </div>
           ))}
-
         </div>
-
       </div>
 
       {/* ===== ANIMATIONS ===== */}
       <style jsx>{`
         @keyframes flow {
-          0% { transform: translateX(-100px); }
-          50% { transform: translateX(100px); }
-          100% { transform: translateX(-100px); }
+          0% {
+            transform: translateX(-100px);
+          }
+          50% {
+            transform: translateX(100px);
+          }
+          100% {
+            transform: translateX(-100px);
+          }
         }
 
         @keyframes flowReverse {
-          0% { transform: translateX(100px); }
-          50% { transform: translateX(-100px); }
-          100% { transform: translateX(100px); }
+          0% {
+            transform: translateX(100px);
+          }
+          50% {
+            transform: translateX(-100px);
+          }
+          100% {
+            transform: translateX(100px);
+          }
         }
 
         @keyframes drift {
-          0% { transform: translateX(-10%) translateY(0px); }
-          50% { transform: translateX(10%) translateY(10px); }
-          100% { transform: translateX(-10%) translateY(0px); }
+          0% {
+            transform: translateX(-10%) translateY(0px);
+          }
+          50% {
+            transform: translateX(10%) translateY(10px);
+          }
+          100% {
+            transform: translateX(-10%) translateY(0px);
+          }
         }
       `}</style>
-
     </section>
   );
 };

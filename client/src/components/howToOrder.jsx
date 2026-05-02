@@ -4,21 +4,42 @@ import { motion } from "framer-motion";
 
 const HowToOrder = () => {
   const steps = [
-    { title: "Оберіть послугу", desc: "Виберіть, що вам потрібно", icon: <Package size={24} /> },
-    { title: "Надішліть макет", desc: "Завантажте файл або опишіть ідею", icon: <FileUp size={24} /> },
-    { title: "Отримайте розрахунок", desc: "Ми прорахуємо вартість і терміни", icon: <Calculator size={24} /> },
-    { title: "Підтвердіть замовлення", desc: "Узгодимо деталі", icon: <CheckCircle2 size={24} /> },
-    { title: "Отримайте замовлення", desc: "Самовивіз або доставка НП", icon: <Truck size={24} /> },
+    {
+      title: "Оберіть послугу",
+      desc: "Виберіть, що вам потрібно",
+      icon: <Package size={24} />,
+    },
+    {
+      title: "Надішліть макет",
+      desc: "Завантажте файл або опишіть ідею",
+      icon: <FileUp size={24} />,
+    },
+    {
+      title: "Отримайте розрахунок",
+      desc: "Ми прорахуємо вартість і терміни",
+      icon: <Calculator size={24} />,
+    },
+    {
+      title: "Підтвердіть замовлення",
+      desc: "Узгодимо деталі",
+      icon: <CheckCircle2 size={24} />,
+    },
+    {
+      title: "Отримайте замовлення",
+      desc: "Самовивіз, доставка НП або іншими службами доставки",
+      icon: <Truck size={24} />,
+    },
   ];
 
   const [active, setActive] = useState(0);
 
   return (
-    <section className="relative py-24 bg-[#07111C] overflow-hidden scroll-mt-30" id="order">
-
+    <section
+      className="relative py-24 bg-[#07111C] overflow-hidden scroll-mt-30"
+      id="order"
+    >
       {/* ===== BACKGROUND ANIMATIONS ===== */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-
         {/* left flowing line */}
         <svg
           className="absolute -left-40 top-10 w-[600px] opacity-20 animate-[float_12s_ease-in-out_infinite]"
@@ -47,12 +68,10 @@ const HowToOrder = () => {
 
         {/* soft glow blob */}
         <div className="absolute top-1/3 left-1/2 w-[400px] h-[400px] bg-[#FFC400]/10 blur-[120px] rounded-full animate-pulse" />
-
       </div>
 
       {/* ===== CONTENT ===== */}
       <div className="relative z-10 max-w-5xl mx-auto px-6">
-
         {/* HEADER */}
         <div className="text-center mb-16">
           <div className="w-16 h-0.5 bg-[#FFC400] mx-auto mb-4"></div>
@@ -68,7 +87,6 @@ const HowToOrder = () => {
 
         {/* STEPS */}
         <div className="relative flex items-center justify-between mb-12">
-
           <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#1A2A3A] -translate-y-1/2" />
 
           <motion.div
@@ -89,8 +107,8 @@ const HowToOrder = () => {
                   active === i
                     ? "bg-[#FFC400] border-[#FFC400] text-black scale-110"
                     : i < active
-                    ? "bg-[#FFC400]/20 border-[#FFC400] text-[#FFC400]"
-                    : "bg-[#0B1620] border-[#1A2A3A] text-gray-500"
+                      ? "bg-[#FFC400]/20 border-[#FFC400] text-[#FFC400]"
+                      : "bg-[#0B1620] border-[#1A2A3A] text-gray-500"
                 }`}
               >
                 {step.icon}
