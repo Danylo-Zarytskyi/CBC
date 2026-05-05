@@ -26,6 +26,11 @@ const Hero = () => {
       img: "https://i.ibb.co/H5gqrk9/image.png",
       alt: "Комп'ютерний центр",
     },
+    {
+      id: 5,
+      img: "https://i.ibb.co/QznZbc4/photo-2026-05-05-20-44-22.jpg",
+      alt: "Фасад",
+    },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

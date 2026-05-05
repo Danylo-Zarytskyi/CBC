@@ -35,7 +35,7 @@ const Works = () => {
   ];
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-white py-24 scroll-mt-24" id="portfolio">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* HEADER */}
         <div className="text-center mb-14">
