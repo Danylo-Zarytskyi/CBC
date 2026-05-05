@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Services = () => {
   const [active, setActive] = useState(0);
+
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
 
   const data = [
     {
@@ -118,12 +121,57 @@ const Services = () => {
     },
   ];
 
-  return (
-    <section className="relative w-full bg-white py-24 overflow-hidden scroll-mt-20" id="services">
+  useEffect(() => {
+    const handler = (e) => {
+      const id = e.detail;
 
-      {/* WAVES BACKGROUND */}
+      const map = {
+        printing: 0,
+        photography: 1,
+        "business-cards": 2,
+        banners: 4,
+        signs: 5,
+        souvenirs: 7,
+      };
+
+      if (map[id] !== undefined) {
+        setActive(map[id]);
+      }
+    };
+
+    window.addEventListener("open-service", handler);
+    return () => window.removeEventListener("open-service", handler);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="services"
+      className={`relative w-full bg-white py-24 overflow-hidden scroll-mt-20 transition-all duration-700
+      ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+    >
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <svg className="absolute w-[220%] h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <svg
+          className="absolute w-[220%] h-full"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
           <path fill="none" stroke="#FFC400" strokeWidth="2" opacity="0.25">
             <animate
               attributeName="d"
@@ -135,24 +183,14 @@ const Services = () => {
               M0,160 C240,220 480,100 720,160 C960,220 1200,100 1440,160"
             />
           </path>
-
-          <path fill="none" stroke="#FFC400" strokeWidth="1" opacity="0.15">
-            <animate
-              attributeName="d"
-              dur="18s"
-              repeatCount="indefinite"
-              values="
-              M0,200 C200,100 400,300 600,200 C800,100 1000,300 1200,200 1440,200;
-              M0,180 C200,260 400,120 600,180 C800,260 1000,120 1200,180 1440,180;
-              M0,200 C200,100 400,300 600,200 C800,100 1000,300 1200,200 1440,200"
-            />
-          </path>
         </svg>
       </div>
 
       {/* CONTENT */}
-      <div className="relative max-w-6xl mx-auto px-4 z-10">
-
+      <div
+        className={`relative max-w-6xl mx-auto px-4 z-10 transition-all duration-700 delay-150
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+      >
         <div className="text-center mb-12">
           <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
           <h2 className="text-4xl font-bold font-[Montserrat] text-[#1F2933]">
@@ -164,7 +202,6 @@ const Services = () => {
         </div>
 
         <div className="grid md:grid-cols-[260px_1fr] gap-8">
-
           {/* LEFT */}
           <div className="space-y-2 max-h-[70vh] overflow-y-auto pr-2">
             {data.map((cat, i) => (
@@ -185,23 +222,25 @@ const Services = () => {
 
           {/* RIGHT */}
           <div className="border border-gray-200 rounded-2xl p-6 max-h-[70vh] overflow-y-auto bg-white/80 backdrop-blur-sm">
-
             <h3 className="text-2xl font-bold font-[Montserrat] mb-6 text-[#1F2933]">
               {data[active].title}
             </h3>
 
             <div className="space-y-3">
               {data[active].items.map((item, i) => (
-                <div key={i} className="flex justify-between p-4 border rounded-xl hover:border-[#FFC400] transition">
-                  <span className="font-[Inter] text-[#1F2933]">{item.name}</span>
+                <div
+                  key={i}
+                  className="flex justify-between p-4 border rounded-xl hover:border-[#FFC400] transition"
+                >
+                  <span className="font-[Inter] text-[#1F2933]">
+                    {item.name}
+                  </span>
                   <span className="text-[#FFC400] font-bold">{item.price}</span>
                 </div>
               ))}
             </div>
-
           </div>
         </div>
-
       </div>
     </section>
   );

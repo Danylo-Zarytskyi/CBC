@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Package, FileUp, Calculator, CheckCircle2, Truck } from "lucide-react";
 import { motion } from "framer-motion";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const HowToOrder = () => {
+  const isRevealed = useScrollReveal();
+
   const steps = [
     {
       title: "Оберіть послугу",
@@ -35,7 +38,12 @@ const HowToOrder = () => {
 
   return (
     <section
-      className="relative py-24 bg-[#07111C] overflow-hidden scroll-mt-30"
+      data-reveal="order-section"
+      className={`relative py-24 bg-[#07111C] overflow-hidden scroll-mt-30 transition-all duration-700 ${
+        isRevealed("order-section")
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
       id="order"
     >
       {/* ===== BACKGROUND ANIMATIONS ===== */}
@@ -73,7 +81,14 @@ const HowToOrder = () => {
       {/* ===== CONTENT ===== */}
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         {/* HEADER */}
-        <div className="text-center mb-16">
+        <div
+          data-reveal="order-header"
+          className={`text-center mb-16 transition-all duration-700 ${
+            isRevealed("order-header")
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
+          }`}
+        >
           <div className="w-16 h-0.5 bg-[#FFC400] mx-auto mb-4"></div>
 
           <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-white">
@@ -86,7 +101,14 @@ const HowToOrder = () => {
         </div>
 
         {/* STEPS */}
-        <div className="relative flex items-center justify-between mb-12">
+        <div
+          data-reveal="order-steps"
+          className={`relative flex items-center justify-between mb-12 transition-all duration-700 ${
+            isRevealed("order-steps")
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
+          }`}
+        >
           <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#1A2A3A] -translate-y-1/2" />
 
           <motion.div

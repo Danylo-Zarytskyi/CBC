@@ -7,12 +7,25 @@ import {
   X,
   Camera,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useScrollReveal } from "../hooks/useScrollReveal"; // шлях до вашого хука
 
 const ContactInfo = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const isRevealed = useScrollReveal(); // використовуємо хук
+
   const phoneNumber = "+380994249545";
   const formattedPhone = "099 424 95 45";
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handlePhoneClick = () => {
     setShowModal(true);
@@ -38,128 +51,185 @@ const ContactInfo = () => {
 
   return (
     <>
-      <section className="py-24 bg-white scroll-mt-25" id="contacts">
-        <div className="max-w-6xl mx-auto px-6">
+      <section className="py-12 md:py-24 bg-white scroll-mt-25" id="contacts">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* HEADER */}
-          <div className="text-center mb-14">
-            <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
+          <div
+            data-reveal="contact-header"
+            className={`text-center mb-10 md:mb-14 transition-all duration-700 ${
+              isRevealed("contact-header")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-6"
+            }`}
+          >
+            <div className="w-12 md:w-16 h-[2px] bg-[#FFC400] mx-auto mb-3 md:mb-4"></div>
 
-            <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-[#1F2933]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-[Montserrat] text-[#1F2933]">
               Наші <span className="text-[#FFC400]">контакти</span>
             </h2>
 
-            <p className="text-gray-500 mt-2 font-[Inter]">
+            <p className="text-gray-500 mt-2 font-[Inter] text-sm sm:text-base">
               Напишіть або зателефонуйте — відповідаємо швидко
             </p>
           </div>
 
-          {/* GRID 1 (3 карточки) */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {/* PHONE */}
             <button
+              data-reveal="contact-phone"
               onClick={handlePhoneClick}
-              className="group border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full cursor-pointer"
+              className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 w-full active:scale-95 md:active:scale-100 ${
+                isRevealed("contact-phone")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center group-hover:bg-[#FFC400]/20 transition">
-                <Phone className="text-[#FFC400]" />
+              <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center group-hover:bg-[#FFC400]/20 transition">
+                <Phone className="text-[#FFC400] w-5 h-5 md:w-6 md:h-6" />
               </div>
 
-              <h3 className="text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
+              <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-1 md:mb-2 font-[Montserrat]">
                 Телефон / Viber / Telegram
               </h3>
 
-              <div className="text-xl font-semibold text-[#FFC400] font-[Inter]">
+              <div className="text-lg md:text-xl font-semibold text-[#FFC400] font-[Inter]">
                 {formattedPhone}
               </div>
 
-              <p className="text-gray-400 text-xs mt-2 font-[Inter]">
+              <p className="text-gray-400 text-[11px] md:text-xs mt-1 md:mt-2 font-[Inter]">
                 натисніть щоб обрати застосунок
               </p>
             </button>
 
             {/* EMAIL */}
             <a
+              data-reveal="contact-email"
               href="mailto:computer_center@ukr.net"
-              className="group border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
+              className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block active:scale-95 md:active:scale-100 ${
+                isRevealed("contact-email")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center group-hover:bg-[#FFC400]/20 transition">
-                <Mail className="text-[#FFC400]" />
+              <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center group-hover:bg-[#FFC400]/20 transition">
+                <Mail className="text-[#FFC400] w-5 h-5 md:w-6 md:h-6" />
               </div>
 
-              <h3 className="text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
+              <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-1 md:mb-2 font-[Montserrat]">
                 Email
               </h3>
 
-              <div className="text-[#FFC400] font-[Inter] break-all">
+              <div className="text-[#FFC400] font-[Inter] break-all text-sm md:text-base">
                 computer_center@ukr.net
               </div>
 
-              <p className="text-gray-400 text-xs mt-2 font-[Inter]">
+              <p className="text-gray-400 text-[11px] md:text-xs mt-1 md:mt-2 font-[Inter]">
                 відповідаємо протягом дня
               </p>
             </a>
 
-            {/* ADDRESS */}
+            {/* ADDRESS WITH MAP */}
             <a
+              data-reveal="contact-address"
               href="https://www.google.com/maps/search/?api=1&query=м.+Стрий,+вул.+Незалежності,+17"
               target="_blank"
               rel="noopener noreferrer"
-              className="group border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
+              className={`group relative border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block col-span-1 sm:col-span-2 lg:col-span-1 ${
+                isRevealed("contact-address")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center group-hover:bg-[#FFC400]/20 transition">
-                <MapPin className="text-[#FFC400]" />
+              {/* MAP */}
+              <iframe
+                src="https://www.google.com/maps?q=м.+Стрий,+вул.+Незалежності,+17&output=embed"
+                className="absolute inset-0 w-full h-full"
+                loading="lazy"
+              ></iframe>
+
+              {/* OVERLAY */}
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition"></div>
+
+              {/* CONTENT */}
+              <div className="relative z-10 p-4 md:p-6 text-center text-white">
+                <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-white/30 transition">
+                  <MapPin className="w-5 h-5 md:w-6 md:h-6" />
+                </div>
+
+                <h3 className="text-base md:text-lg font-bold mb-1 md:mb-2 font-[Montserrat]">
+                  Адреса
+                </h3>
+
+                <div className="font-[Inter] text-sm md:text-base">
+                  м. Стрий, вул. Незалежності, 17
+                </div>
+
+                <p className="text-white/70 text-[11px] md:text-xs mt-1 md:mt-2 font-[Inter]">
+                  натисніть щоб відкрити карту
+                </p>
               </div>
-
-              <h3 className="text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-                Адреса
-              </h3>
-
-              <div className="text-[#1F2933] font-[Inter]">
-                м. Стрий, вул. Незалежності, 17
-              </div>
-
-              <p className="text-gray-400 text-xs mt-2 font-[Inter]">
-                відкриється в Google Maps
-              </p>
             </a>
           </div>
 
-          {/* CENTERED SOCIALS */}
-          <div className="flex justify-center gap-6 mt-6 flex-wrap">
+          {/* SOCIALS */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 mt-6">
             {/* INSTAGRAM */}
             <a
+              data-reveal="contact-instagram"
               href="https://www.instagram.com/computer_center_stryi"
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-full max-w-xs border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
+              className={`group w-full sm:max-w-xs border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block active:scale-95 md:active:scale-100 ${
+                isRevealed("contact-instagram")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition">
-                <Camera className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition">
+                <svg
+                  className="w-5 h-5 md:w-6 md:h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle
+                    cx="17"
+                    cy="7"
+                    r="1.5"
+                    fill="currentColor"
+                    stroke="none"
+                  />
+                </svg>
               </div>
 
-              <h3 className="text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
+              <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-1 md:mb-2 font-[Montserrat]">
                 Instagram
               </h3>
 
-              <div className="text-[#1F2933] font-[Inter] text-sm">
+              <div className="text-[#1F2933] font-[Inter] text-xs md:text-sm break-all">
                 @computer_center_stryi
               </div>
-
-              <p className="text-gray-400 text-xs mt-2 font-[Inter]">
-                стежте за новинами та акціями
-              </p>
             </a>
 
             {/* TIKTOK */}
             <a
+              data-reveal="contact-tiktok"
               href="https://www.tiktok.com/@computer_center_stryi"
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-full max-w-xs border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
+              className={`group w-full sm:max-w-xs border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block active:scale-95 md:active:scale-100 ${
+                isRevealed("contact-tiktok")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
             >
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-black flex items-center justify-center group-hover:scale-110 transition">
+              <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-black flex items-center justify-center group-hover:scale-110 transition">
                 <svg
-                  className="w-5 h-5 text-white"
+                  className="w-5 h-5 md:w-6 md:h-6 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -167,16 +237,16 @@ const ContactInfo = () => {
                 </svg>
               </div>
 
-              <h3 className="text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
+              <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-1 md:mb-2 font-[Montserrat]">
                 TikTok
               </h3>
 
-              <div className="text-[#1F2933] font-[Inter] text-sm">
+              <div className="text-[#1F2933] font-[Inter] text-xs md:text-sm break-all">
                 @computer_center_stryi
               </div>
 
-              <p className="text-gray-400 text-xs mt-2 font-[Inter]">
-                цікаві відео та корисні поради
+              <p className="text-gray-400 text-[11px] md:text-xs mt-1 md:mt-2 font-[Inter]">
+                відео та корисні поради
               </p>
             </a>
           </div>
@@ -190,51 +260,37 @@ const ContactInfo = () => {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white rounded-2xl max-w-sm w-full p-6 animate-[fadeIn_0.2s_ease]"
+            className="bg-white rounded-2xl max-w-sm w-full p-5 md:p-6 animate-modalIn"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold font-[Montserrat] text-[#1F2933]">
-                Обрати дію
-              </h3>
+            <div className="flex justify-between items-center mb-5 md:mb-6">
+              <h3 className="text-lg md:text-xl font-bold">Обрати дію</h3>
               <button
                 onClick={() => setShowModal(false)}
                 className="p-1 hover:bg-gray-100 rounded-full transition"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
             </div>
-
-            <p className="text-gray-500 text-sm mb-4 font-[Inter]">
-              Номер:{" "}
-              <span className="font-semibold text-[#1F2933]">
-                {formattedPhone}
-              </span>
-            </p>
 
             <div className="space-y-3">
               <button
                 onClick={handleCall}
-                className="w-full flex items-center gap-4 p-3 rounded-xl border border-gray-200 hover:border-[#FFC400] hover:bg-[#FFC400]/5 transition"
+                className="w-full border border-gray-200 hover:border-[#FFC400] hover:bg-[#FFC400]/5 p-3 md:p-4 rounded-xl transition-all font-medium text-sm md:text-base active:scale-98"
               >
-                <Phone className="text-green-600" />
-                Подзвонити
+                📞 Подзвонити
               </button>
-
               <button
                 onClick={handleTelegram}
-                className="w-full flex items-center gap-4 p-3 rounded-xl border border-gray-200 hover:border-[#FFC400] hover:bg-[#FFC400]/5 transition"
+                className="w-full border border-gray-200 hover:border-[#26A5E4] hover:bg-[#26A5E4]/5 p-3 md:p-4 rounded-xl transition-all font-medium text-sm md:text-base active:scale-98"
               >
-                <Send className="text-[#26A5E4]" />
-                Telegram
+                💬 Telegram
               </button>
-
               <button
                 onClick={handleViber}
-                className="w-full flex items-center gap-4 p-3 rounded-xl border border-gray-200 hover:border-[#FFC400] hover:bg-[#FFC400]/5 transition"
+                className="w-full border border-gray-200 hover:border-[#7360F2] hover:bg-[#7360F2]/5 p-3 md:p-4 rounded-xl transition-all font-medium text-sm md:text-base active:scale-98"
               >
-                <MessageCircle className="text-[#7360F2]" />
-                Viber
+                📱 Viber
               </button>
             </div>
           </div>
@@ -242,15 +298,19 @@ const ContactInfo = () => {
       )}
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
+        @keyframes modalIn {
+          0% {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.9) translateY(20px);
           }
-          to {
+          100% {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1) translateY(0);
           }
+        }
+
+        .animate-modalIn {
+          animation: modalIn 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
       `}</style>
     </>

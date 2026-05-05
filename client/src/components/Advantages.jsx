@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 const Advantages = () => {
   const advantages = [
     {
@@ -5,7 +7,7 @@ const Advantages = () => {
       title: "Зручне розташування у Стрию",
       desc: "КДЦ знаходиться за адресою вул. Незалежності, 17 — легко знайти та швидко зайти",
       mapLink:
-        "https://www.google.com/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%9D%D0%B5%D0%B7%D0%B0%D0%BB%D0%B5%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%96,+17,+%D0%A1%D1%82%D1%80%D0%B8%D0%B9,+%D0%9B%D1%8C%D0%B2%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+82400/@49.2571841,23.8513239,17z/data=!3m1!4b1!4m6!3m5!1s0x473a6a1de83f0809:0x5ab07ad278586a9b!8m2!3d49.2571841!4d23.8513239!16s%2Fg%2F11c884180b?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D",
+        "https://www.google.com/maps/place/%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%9D%D0%B5%D0%B7%D0%B0%D0%BB%D0%B5%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%96,+17,+%D0%A1%D1%82%D1%80%D0%B8%D0%B9,+%D0%9B%D1%8C%D0%B2%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+82400/@49.2571841,23.8513239,17z/data=!3m1!4b1",
     },
     {
       icon: "⚡",
@@ -45,49 +47,7 @@ const Advantages = () => {
       className="relative py-24 bg-white overflow-hidden scroll-mt-25"
       id="about"
     >
-      {/* ===== BACKGROUND LINES ===== */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* left flowing line */}
-        <svg
-          className="absolute -left-60 top-0 w-[600px] opacity-20 animate-[flow_20s_linear_infinite]"
-          viewBox="0 0 600 600"
-        >
-          <path
-            d="M0,300 C150,100 300,500 600,300"
-            fill="none"
-            stroke="#FFC400"
-            strokeWidth="2"
-          />
-        </svg>
-
-        {/* right flowing line */}
-        <svg
-          className="absolute -right-60 bottom-0 w-[650px] opacity-10 animate-[flowReverse_25s_linear_infinite]"
-          viewBox="0 0 600 600"
-        >
-          <path
-            d="M0,300 C200,50 400,550 600,300"
-            fill="none"
-            stroke="#FFC400"
-            strokeWidth="2"
-          />
-        </svg>
-
-        {/* subtle middle wave */}
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[900px] opacity-10 animate-[drift_30s_linear_infinite]"
-          viewBox="0 0 1200 200"
-        >
-          <path
-            d="M0,100 C200,0 400,200 600,100 C800,0 1000,200 1200,100"
-            fill="none"
-            stroke="#FFC400"
-            strokeWidth="2"
-          />
-        </svg>
-      </div>
-
-      {/* ===== CONTENT ===== */}
+      {/* CONTENT */}
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* HEADER */}
         <div className="text-center mb-14">
@@ -105,9 +65,17 @@ const Advantages = () => {
         {/* GRID */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {advantages.map((adv, i) => (
-            <div
+            <motion.div
               key={i}
               onClick={() => handleCardClick(adv)}
+              initial={{ opacity: 0, y: 40, scale: 0.97, filter: "blur(6px)" }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+                delay: i * 0.08,
+              }}
               className={`group border border-gray-200 rounded-2xl p-6 bg-white hover:border-[#FFC400] hover:shadow-lg transition-all duration-300 ${
                 adv.mapLink ? "cursor-pointer" : ""
               }`}
@@ -121,49 +89,10 @@ const Advantages = () => {
               </h3>
 
               <p className="text-gray-500 text-sm font-[Inter]">{adv.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      {/* ===== ANIMATIONS ===== */}
-      <style jsx>{`
-        @keyframes flow {
-          0% {
-            transform: translateX(-100px);
-          }
-          50% {
-            transform: translateX(100px);
-          }
-          100% {
-            transform: translateX(-100px);
-          }
-        }
-
-        @keyframes flowReverse {
-          0% {
-            transform: translateX(100px);
-          }
-          50% {
-            transform: translateX(-100px);
-          }
-          100% {
-            transform: translateX(100px);
-          }
-        }
-
-        @keyframes drift {
-          0% {
-            transform: translateX(-10%) translateY(0px);
-          }
-          50% {
-            transform: translateX(10%) translateY(10px);
-          }
-          100% {
-            transform: translateX(-10%) translateY(0px);
-          }
-        }
-      `}</style>
     </section>
   );
 };

@@ -6,7 +6,8 @@ import ContactInfo from "./components/ContactInfo";
 import ContactForm from "./components/ContactForm";
 import Footer from "./components/Footer";
 import HowToOrder from "./components/HowToOrder";
-import PopularServices from "./components/popularServices"
+import PopularServices from "./components/popularServices";
+import Works from "./components/Works";
 import "./index.css";
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
         <HowToOrder />
 
         <Advantages />
-
+        <Works />
         <ContactInfo />
         <ContactForm />
       </main>

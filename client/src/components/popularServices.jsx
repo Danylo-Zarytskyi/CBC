@@ -1,4 +1,9 @@
+import { useEffect, useRef, useState } from "react";
+
 const PopularServices = () => {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
   const services = [
     {
       image:
@@ -6,6 +11,7 @@ const PopularServices = () => {
       name: "Друк документів",
       price: "від 4 ₴",
       desc: "Ч/б та кольоровий друк А4, А3",
+      id: "printing",
     },
     {
       image:
@@ -13,6 +19,7 @@ const PopularServices = () => {
       name: "Фотодрук",
       price: "від 7 ₴",
       desc: "Фото 10×15, 13×18, А4, А3",
+      id: "photography",
     },
     {
       image:
@@ -20,37 +27,56 @@ const PopularServices = () => {
       name: "Візитки",
       price: "від 150 ₴",
       desc: "Односторонні та двосторонні",
+      id: "business-cards",
     },
     {
-      image:
-        "https://static.wixstatic.com/media/05e102_b46e69bb8239452b91a4ba83c6cfa1bb~mv2.webp",
+      image: "https://i.ibb.co/4ZWjfdNY/photo-2026-05-04-21-43-11.jpg",
       name: "Таблички",
       price: "від 80 ₴",
       desc: "Пластик, акрил, метал",
+      id: "signs",
     },
     {
-      image:
-        "https://static.wixstatic.com/media/05e102_e24c1c7024884816a24d1e4bd0c2daef~mv2.webp",
+      image: "https://i.ibb.co/p7s4gny/photo-2026-05-04-21-47-42.jpg",
       name: "Банери",
       price: "від 250 ₴",
       desc: "Будь-які розміри",
+      id: "banners",
     },
     {
-      image:
-        "https://static.wixstatic.com/media/05e102_8f70a7587f1c4a8c9aff988edcd4dfd6~mv2.webp",
+      image: "https://i.ibb.co/bYG1BWX/photo-2026-05-04-21-43-11.jpg",
       name: "Сувеніри",
       price: "від 80 ₴",
       desc: "Горнятка, футболки, пазли",
+      id: "souvenirs",
     },
   ];
 
+  // 🔥 SCROLL REVEAL
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 },
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative bg-white py-20 overflow-hidden">
-
-      {/* ===== WAVE BACKGROUND (new style) ===== */}
+    <section
+      ref={sectionRef}
+      className={`relative bg-white py-20 overflow-hidden transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}
+    >
+      {/* BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none z-0">
-
-        {/* top wave */}
         <svg
           className="absolute -top-40 -left-40 w-[700px] opacity-20 animate-[float_18s_ease-in-out_infinite]"
           viewBox="0 0 600 600"
@@ -63,7 +89,6 @@ const PopularServices = () => {
           />
         </svg>
 
-        {/* bottom wave */}
         <svg
           className="absolute -bottom-40 -right-40 w-[800px] opacity-10 animate-[floatReverse_22s_ease-in-out_infinite]"
           viewBox="0 0 600 600"
@@ -75,26 +100,10 @@ const PopularServices = () => {
             strokeWidth="2"
           />
         </svg>
-
-        {/* middle thin line flow */}
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[900px] opacity-10 animate-[drift_30s_linear_infinite]"
-          viewBox="0 0 1200 200"
-        >
-          <path
-            d="M0,100 C200,0 400,200 600,100 C800,0 1000,200 1200,100"
-            fill="none"
-            stroke="#FFC400"
-            strokeWidth="2"
-          />
-        </svg>
-
       </div>
 
-      {/* ===== CONTENT ===== */}
+      {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-
-        {/* HEADER */}
         <div className="text-center mb-14">
           <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
 
@@ -107,25 +116,27 @@ const PopularServices = () => {
           </p>
         </div>
 
-        {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {services.map((s, i) => (
             <div
               key={i}
-              className="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 hover:border-[#FFC400]"
+              className={`group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-700 hover:border-[#FFC400] ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
+              style={{ transitionDelay: `${i * 100}ms` }} // 🔥 stagger
             >
-
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden bg-gray-100">
                 <img
                   src={s.image}
                   alt={s.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition duration-500"
+                  loading="lazy"
                 />
               </div>
 
               <div className="p-6">
-
                 <h3 className="text-xl font-bold text-[#1F2933] font-[Montserrat]">
                   {s.name}
                 </h3>
@@ -135,26 +146,33 @@ const PopularServices = () => {
                 </p>
 
                 <div className="flex justify-between items-center mt-5">
-
                   <span className="text-[#FFC400] font-bold text-lg">
                     {s.price}
                   </span>
 
-                  <span className="text-gray-400 group-hover:text-[#FFC400] text-sm transition">
+                  <button
+                    onClick={() => {
+                      window.dispatchEvent(
+                        new CustomEvent("open-service", { detail: s.id }),
+                      );
+
+                      document
+                        .getElementById("services")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="text-gray-400 group-hover:text-[#FFC400] text-sm transition"
+                  >
                     Детальніше →
-                  </span>
-
+                  </button>
                 </div>
-
               </div>
             </div>
           ))}
-
         </div>
       </div>
 
-      {/* ===== ANIMATIONS ===== */}
-      <style jsx>{`
+      {/* ANIMATIONS */}
+      <style>{`
         @keyframes float {
           0% { transform: translate(0px, 0px) rotate(0deg); }
           50% { transform: translate(40px, 30px) rotate(10deg); }
@@ -166,13 +184,7 @@ const PopularServices = () => {
           50% { transform: translate(-40px, -20px) rotate(-10deg); }
           100% { transform: translate(0px, 0px) rotate(0deg); }
         }
-
-        @keyframes drift {
-          0% { transform: translateX(-10%); }
-          100% { transform: translateX(10%); }
-        }
       `}</style>
-
     </section>
   );
 };

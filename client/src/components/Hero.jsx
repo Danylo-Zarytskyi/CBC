@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Hero = () => {
+  const heroRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
   const slides = [
     {
       id: 1,
@@ -27,8 +30,8 @@ const Hero = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // ===== typing states =====
-  const title = "КДЦ ТЕХНОМАКС";
+  // typing (НЕ ЧІПАЄМО)
+  const title = "Комп'ютерно-діловий центр ТЕХНОМАКС";
   const subtitle = "Копіцентр у Стрию";
 
   const [typedTitle, setTypedTitle] = useState("");
@@ -58,6 +61,7 @@ const Hero = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  // slider (НЕ ЧІПАЄМО)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
@@ -65,10 +69,29 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <section className="relative h-screen pt-20 overflow-hidden bg-[#07111C] scroll-mt-20" id="home">
+  // 🔥 SCROLL REVEAL
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 },
+    );
 
-      {/* SLIDER */}
+    if (heroRef.current) observer.observe(heroRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={heroRef}
+      className="relative h-screen pt-20 overflow-hidden bg-[#07111C] scroll-mt-20"
+      id="home"
+    >
+      {/* SLIDER (НЕ ЧІПАЄМО) */}
       <div className="absolute inset-0 z-0">
         {slides.map((slide, idx) => (
           <div
@@ -87,7 +110,7 @@ const Hero = () => {
         ))}
       </div>
 
-      {/* ARROWS */}
+      {/* ARROWS (НЕ ЧІПАЄМО) */}
       <button
         onClick={() =>
           setCurrentIndex((p) => (p - 1 + slides.length) % slides.length)
@@ -98,18 +121,18 @@ const Hero = () => {
       </button>
 
       <button
-        onClick={() =>
-          setCurrentIndex((p) => (p + 1) % slides.length)
-        }
+        onClick={() => setCurrentIndex((p) => (p + 1) % slides.length)}
         className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-20 bg-[#FFC400]/20 hover:bg-[#FFC400]/40 p-2 rounded-full"
       >
         <ChevronRight className="text-[#FFC400]" />
       </button>
 
-      {/* CONTENT */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 h-full flex flex-col justify-center text-center">
-
-        {/* TYPE TITLE */}
+      {/* CONTENT + SCROLL ANIMATION */}
+      <div
+        className={`relative z-10 max-w-5xl mx-auto px-6 h-full flex flex-col justify-center text-center transition-all duration-700 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
+      >
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
           {typedTitle}
           <span className="animate-pulse text-[#FFC400]">|</span>
@@ -128,11 +151,10 @@ const Hero = () => {
         </p>
 
         <p className="mt-6 text-sm md:text-lg text-white/70 max-w-2xl mx-auto">
-          Друкуємо документи, фото, візитки, банери, таблички, наліпки та сувенірну продукцію.
-          Допомагаємо з макетами та швидко виконуємо замовлення.
+          Друкуємо документи, фото, візитки, банери, таблички, наліпки та
+          сувенірну продукцію.
         </p>
 
-        {/* CTA */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <a
             href="#order"
@@ -150,7 +172,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* INDICATORS */}
+      {/* INDICATORS (НЕ ЧІПАЄМО) */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, idx) => (
           <button
