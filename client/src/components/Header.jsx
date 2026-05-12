@@ -10,7 +10,7 @@ const Header = () => {
     { label: "Головна", id: "home" },
     { label: "Послуги", id: "services" },
     { label: "Наші роботи", id: "portfolio" },
-    { label: "Як замовити", id: "order" },
+    { label: "Як замовити", id: "howToOrder" },
     { label: "Про нас", id: "about" },
     { label: "Контакти", id: "contacts" },
   ];
@@ -23,7 +23,6 @@ const Header = () => {
     }
   };
 
-  // close mobile menu on scroll
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -59,7 +58,7 @@ const Header = () => {
             <button
               key={item.id}
               onClick={() => handleScroll(item.id)}
-              className="text-white/70 hover:text-[#FFC400] transition"
+              className="cursor-pointer text-white/70 hover:text-[#FFC400] transition"
             >
               {item.label}
             </button>
@@ -69,12 +68,13 @@ const Header = () => {
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
           {/* ORDER */}
-          <a
-            href="#order"
-            className="bg-[#FFC400] text-black px-4 py-2 rounded-lg font-semibold hidden sm:block"
+          <button
+            className="bg-[#FFC400] text-black px-4 py-2 rounded-lg font-semibold hidden sm:block cursor-pointer transition-all duration-300 hover:bg-[#ffda4d] hover:shadow-[0_0_15px_rgba(255,196,0,0.5)] hover:scale-[1.03] active:scale-[0.98]"
+            id="order"
+            onClick={() => handleScroll("orderForm")}
           >
             Замовити
-          </a>
+          </button>
 
           {/* PHONE + SOCIALS */}
           <div className="flex flex-col items-center">
@@ -85,9 +85,9 @@ const Header = () => {
               📞 099 42 49 545
             </a>
 
-            {/* FILLED SOCIAL BUTTONS */}
+            {/* SOCIALS */}
             <div className="flex items-center gap-3 mt-2">
-              {/* Telegram (filled) */}
+              {/* Telegram */}
               <button
                 onClick={() => window.open("https://t.me/cbc_stryi", "_blank")}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-[#26A5E4] hover:scale-110 transition"
@@ -96,24 +96,64 @@ const Header = () => {
                 <Send className="w-4 h-4 text-white" />
               </button>
 
-              {/* Viber (filled + proper icon) */}
+              {/* Viber */}
               <button
                 onClick={() =>
-                  window.open(
-                    "viber://contact?number=%2B380994249545",
-                    "_blank",
-                  )
+                  window.open("viber://chat?number=%2B380994249545", "_blank")
                 }
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-[#7360F2] hover:scale-110 transition"
                 title="Viber"
               >
-                {/* Viber SVG */}
                 <svg
                   viewBox="0 0 24 24"
                   className="w-4 h-4 text-white"
                   fill="currentColor"
                 >
                   <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.75.45 3.46 1.31 4.98L2 22l5.22-1.37c1.46.8 3.1 1.23 4.82 1.23 5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm5.4 13.66c-.23.65-1.28 1.24-1.77 1.31-.48.07-1.08.1-1.75-.1-.4-.12-.92-.27-1.59-.57-2.8-1.22-4.62-4.01-4.76-4.2-.14-.19-1.14-1.52-1.14-2.9 0-1.38.73-2.05 1-2.34.27-.29.6-.36.8-.36.2 0 .4 0 .58.01.19.01.44-.07.69.53.23.57.78 1.96.85 2.1.07.14.12.31.02.5-.1.19-.15.31-.3.48-.15.17-.32.38-.46.51-.15.14-.3.29-.13.59.17.29.75 1.24 1.61 2.01 1.1.98 2.02 1.28 2.32 1.42.3.14.48.12.66-.07.18-.19.76-.88.97-1.18.21-.29.43-.24.72-.14.29.1 1.84.87 2.16 1.03.32.16.54.24.62.37.08.13.08.75-.15 1.4z" />
+                </svg>
+              </button>
+
+              {/* Instagram */}
+              <button
+                onClick={() =>
+                  window.open(
+                    "https://www.instagram.com/computer_center_stryi",
+                    "_blank",
+                  )
+                }
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 hover:scale-110 transition"
+                title="Instagram"
+              >
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17" cy="7" r="1.5" fill="currentColor" />
+                </svg>
+              </button>
+
+              {/* TikTok */}
+              <button
+                onClick={() =>
+                  window.open(
+                    "https://www.tiktok.com/@computer_center_stryi",
+                    "_blank",
+                  )
+                }
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-black hover:scale-110 transition"
+                title="TikTok"
+              >
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                 </svg>
               </button>
             </div>

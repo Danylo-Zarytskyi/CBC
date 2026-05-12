@@ -1,58 +1,35 @@
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const PopularServices = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const services = [
-    {
-      image:
-        "https://static.wixstatic.com/media/05e102_8d7899bfafa24e9aa68cc3b93157095e~mv2.webp",
-      name: "Друк документів",
-      price: "від 4 ₴",
-      desc: "Ч/б та кольоровий друк А4, А3",
-      id: "printing",
-    },
-    {
-      image:
-        "https://static.wixstatic.com/media/05e102_0fa2ad3acdcc4ef7ae870407b3853faa~mv2.webp",
-      name: "Фотодрук",
-      price: "від 7 ₴",
-      desc: "Фото 10×15, 13×18, А4, А3",
-      id: "photography",
-    },
-    {
-      image:
-        "https://static.wixstatic.com/media/05e102_8d2893b12df3434683a3f2ab84f6c134~mv2.webp",
-      name: "Візитки",
-      price: "від 150 ₴",
-      desc: "Односторонні та двосторонні",
-      id: "business-cards",
-    },
-    {
-      image: "https://i.ibb.co/4ZWjfdNY/photo-2026-05-04-21-43-11.jpg",
-      name: "Таблички",
-      price: "від 80 ₴",
-      desc: "Пластик, акрил, метал",
-      id: "signs",
-    },
-    {
-      image: "https://i.ibb.co/p7s4gny/photo-2026-05-04-21-47-42.jpg",
-      name: "Банери",
-      price: "від 250 ₴",
-      desc: "Будь-які розміри",
-      id: "banners",
-    },
-    {
-      image: "https://i.ibb.co/bYG1BWX/photo-2026-05-04-21-43-11.jpg",
-      name: "Сувеніри",
-      price: "від 80 ₴",
-      desc: "Горнятка, футболки, пазли",
-      id: "souvenirs",
-    },
-  ];
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 🔥 SCROLL REVEAL
+  // FETCH FROM DB
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.get(
+          "http://localhost:4000/api/popular-services",
+        );
+
+        setServices(res.data);
+      } catch (err) {
+        console.log("POPULAR SERVICES ERROR:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // SCROLL REVEAL
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -68,11 +45,29 @@ const PopularServices = () => {
     return () => observer.disconnect();
   }, []);
 
+  // LOADING STATE (ФІКС)
+  if (loading) {
+    return (
+      <section className="bg-white py-20 text-center">
+        <p className="text-gray-500">Завантаження...</p>
+      </section>
+    );
+  }
+
+  // EMPTY STATE (якщо нема даних)
+  if (!services.length) {
+    return (
+      <section className="bg-white py-20 text-center">
+        <p className="text-gray-400">Немає популярних послуг</p>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={sectionRef}
       className={`relative bg-white py-20 overflow-hidden transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        isVisible ? "opacity-100 translate-y-0" : "opacity-100 translate-y-0"
       }`}
     >
       {/* BACKGROUND */}
@@ -119,26 +114,26 @@ const PopularServices = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s, i) => (
             <div
-              key={i}
+              key={s._id}
               className={`group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-700 hover:border-[#FFC400] ${
                 isVisible
                   ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-6"
+                  : "opacity-100 translate-y-0"
               }`}
-              style={{ transitionDelay: `${i * 100}ms` }} // 🔥 stagger
+              style={{ transitionDelay: `${i * 100}ms` }}
             >
               <div className="h-48 overflow-hidden bg-gray-100">
                 <img
                   src={s.image}
-                  alt={s.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-110 transition duration-500"
+                  alt={s.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                   loading="lazy"
                 />
               </div>
 
               <div className="p-6">
                 <h3 className="text-xl font-bold text-[#1F2933] font-[Montserrat]">
-                  {s.name}
+                  {s.title}
                 </h3>
 
                 <p className="text-gray-500 text-sm mt-2 font-[Inter]">
@@ -153,7 +148,9 @@ const PopularServices = () => {
                   <button
                     onClick={() => {
                       window.dispatchEvent(
-                        new CustomEvent("open-service", { detail: s.id }),
+                        new CustomEvent("open-service", {
+                          detail: s.serviceId,
+                        }),
                       );
 
                       document

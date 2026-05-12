@@ -35,8 +35,8 @@ const Hero = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // typing (НЕ ЧІПАЄМО)
-  const title = "Комп'ютерно-діловий центр ТЕХНОМАКС";
+  // typing
+  const title = "Комп'ютерно-Діловий Центр";
   const subtitle = "Копіцентр у Стрию";
 
   const [typedTitle, setTypedTitle] = useState("");
@@ -66,21 +66,20 @@ const Hero = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  // slider (НЕ ЧІПАЄМО)
+  // slider
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
-  // 🔥 SCROLL REVEAL
+  // scroll reveal
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
       { threshold: 0.2 },
     );
@@ -90,13 +89,25 @@ const Hero = () => {
     return () => observer.disconnect();
   }, []);
 
+  // ✅ SCROLL FUNCTION (ОСЬ ГОЛОВНЕ)
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <section
       ref={heroRef}
       className="relative h-screen pt-20 overflow-hidden bg-[#07111C] scroll-mt-20"
       id="home"
     >
-      {/* SLIDER (НЕ ЧІПАЄМО) */}
+      {/* SLIDER */}
       <div className="absolute inset-0 z-0">
         {slides.map((slide, idx) => (
           <div
@@ -115,7 +126,7 @@ const Hero = () => {
         ))}
       </div>
 
-      {/* ARROWS (НЕ ЧІПАЄМО) */}
+      {/* ARROWS */}
       <button
         onClick={() =>
           setCurrentIndex((p) => (p - 1 + slides.length) % slides.length)
@@ -132,7 +143,7 @@ const Hero = () => {
         <ChevronRight className="text-[#FFC400]" />
       </button>
 
-      {/* CONTENT + SCROLL ANIMATION */}
+      {/* CONTENT */}
       <div
         className={`relative z-10 max-w-5xl mx-auto px-6 h-full flex flex-col justify-center text-center transition-all duration-700 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -161,23 +172,25 @@ const Hero = () => {
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="#order"
+          {/* ✅ FIXED BUTTON */}
+          <button
+            onClick={() => scrollTo("orderForm")}
             className="bg-[#FFC400] text-black px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
           >
-            Замовити розрахунок
-          </a>
+            Замовити зараз
+          </button>
 
-          <a
-            href="#services"
+          {/* ✅ FIXED BUTTON */}
+          <button
+            onClick={() => scrollTo("services")}
             className="border border-white/30 text-white px-6 py-3 rounded-lg hover:border-[#FFC400] hover:text-[#FFC400] transition"
           >
             Переглянути послуги
-          </a>
+          </button>
         </div>
       </div>
 
-      {/* INDICATORS (НЕ ЧІПАЄМО) */}
+      {/* INDICATORS */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, idx) => (
           <button

@@ -54,7 +54,8 @@ const Advantages = () => {
           <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
 
           <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-[#1F2933]">
-            Чому обирають <span className="text-[#FFC400]">КДЦ ТЕХНОМАКС</span>
+            Чому обирають{" "}
+            <span className="text-[#FFC400]">Комп'ютерно-Діловий Центр</span>
           </h2>
 
           <p className="text-gray-500 mt-2 font-[Inter]">

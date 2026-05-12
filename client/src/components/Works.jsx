@@ -1,38 +1,30 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Works = () => {
-  const works = [
-    {
-      image: "https://i.ibb.co/4ZWjfdNY/photo-2026-05-04-21-43-11.jpg",
-      title: "Табличка офісна",
-      desc: "Акрил, гравірування",
-    },
-    {
-      image: "https://i.ibb.co/p7s4gny/photo-2026-05-04-21-47-42.jpg",
-      title: "Банер рекламний",
-      desc: "Широкоформатний друк",
-    },
-    {
-      image: "https://i.ibb.co/bYG1BWX/photo-2026-05-04-21-43-11.jpg",
-      title: "Сувенірна продукція",
-      desc: "Горнятка, футболки",
-    },
-    {
-      image: "https://i.ibb.co/CkdCBCW/photo-2026-05-05-19-13-05.jpg",
-      title: "Візитки",
-      desc: "Двосторонній друк",
-    },
-    {
-      image: "https://i.ibb.co/fYGXHRB3/photo-2026-05-05-19-11-41.jpg",
-      title: "Фотодрук",
-      desc: "Фото різних форматів",
-    },
-    {
-      image: "https://i.ibb.co/cKRMrQmt/photo-2026-05-05-19-14-00.jpg",
-      title: "Документи",
-      desc: "Ч/б та кольоровий друк",
-    },
-  ];
+  const [works, setWorks] = useState([]);
+
+  useEffect(() => {
+    const fetchWorks = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/api/works");
+        setWorks(res.data);
+      } catch (err) {
+        console.log("WORKS ERROR:", err);
+      }
+    };
+
+    fetchWorks();
+  }, []);
+
+  if (!works.length) {
+    return (
+      <section className="bg-white py-24 text-center">
+        <p className="text-gray-500">Завантаження...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-white py-24 scroll-mt-24" id="portfolio">
@@ -54,28 +46,21 @@ const Works = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {works.map((w, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50, scale: 0.97, filter: "blur(6px)" }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              key={w._id}
+              initial={{ opacity: 0, y: 50, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.25 }}
-              transition={{
-                duration: 0.6,
-                ease: [0.22, 1, 0.36, 1],
-                delay: i * 0.1,
-              }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
               className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
             >
-              {/* IMAGE */}
               <div className="h-64 overflow-hidden bg-gray-100">
                 <img
                   src={w.image}
                   alt={w.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                  loading="lazy"
                 />
               </div>
 
-              {/* OVERLAY */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
                 <h3 className="text-white text-lg font-bold">{w.title}</h3>
                 <p className="text-gray-200 text-sm">{w.desc}</p>

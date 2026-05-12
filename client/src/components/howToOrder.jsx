@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Package, FileUp, Calculator, CheckCircle2, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -36,6 +36,14 @@ const HowToOrder = () => {
 
   const [active, setActive] = useState(0);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActive((prev) => (prev + 1) % steps.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [steps.length]);
+
   return (
     <section
       data-reveal="order-section"
@@ -44,11 +52,9 @@ const HowToOrder = () => {
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-10"
       }`}
-      id="order"
+      id="howToOrder"
     >
-      {/* ===== BACKGROUND ANIMATIONS ===== */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* left flowing line */}
         <svg
           className="absolute -left-40 top-10 w-[600px] opacity-20 animate-[float_12s_ease-in-out_infinite]"
           viewBox="0 0 600 200"
@@ -61,7 +67,6 @@ const HowToOrder = () => {
           />
         </svg>
 
-        {/* right flowing line */}
         <svg
           className="absolute -right-40 bottom-10 w-[700px] opacity-10 animate-[float_18s_ease-in-out_infinite_reverse]"
           viewBox="0 0 600 200"
@@ -74,13 +79,10 @@ const HowToOrder = () => {
           />
         </svg>
 
-        {/* soft glow blob */}
         <div className="absolute top-1/3 left-1/2 w-[400px] h-[400px] bg-[#FFC400]/10 blur-[120px] rounded-full animate-pulse" />
       </div>
 
-      {/* ===== CONTENT ===== */}
       <div className="relative z-10 max-w-5xl mx-auto px-6">
-        {/* HEADER */}
         <div
           data-reveal="order-header"
           className={`text-center mb-16 transition-all duration-700 ${
@@ -100,7 +102,6 @@ const HowToOrder = () => {
           </p>
         </div>
 
-        {/* STEPS */}
         <div
           data-reveal="order-steps"
           className={`relative flex items-center justify-between mb-12 transition-all duration-700 ${
@@ -146,7 +147,6 @@ const HowToOrder = () => {
           ))}
         </div>
 
-        {/* CONTENT */}
         <motion.div
           key={active}
           initial={{ opacity: 0, y: 20 }}
@@ -156,13 +156,13 @@ const HowToOrder = () => {
           <h3 className="text-2xl font-bold text-[#FFC400] mb-3 font-[Montserrat]">
             {steps[active].title}
           </h3>
+
           <p className="text-gray-600 font-[Inter] text-lg">
             {steps[active].desc}
           </p>
         </motion.div>
       </div>
 
-      {/* local animation keyframes */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
