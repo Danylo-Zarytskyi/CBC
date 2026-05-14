@@ -12,6 +12,76 @@ import {
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
+/* 🔥 FIX: компонент винесений з render (ЦЕ ЄДИНА ЗМІНА) */
+const Card = ({
+  title,
+  value,
+  sub,
+  href,
+  icon,
+  color = "yellow",
+  external,
+  onCopy,
+  copyable,
+  copied,
+}) => {
+  const colors = {
+    yellow: "text-[#FFC400] bg-[#FFC400]/10",
+    green: "text-green-400 bg-green-500/10",
+    blue: "text-sky-400 bg-sky-500/10",
+    purple: "text-purple-400 bg-purple-500/10",
+    pink: "text-pink-400 bg-pink-500/10",
+  };
+
+  const content = (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -8 }}
+      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-500 hover:border-[#FFC400]/40"
+    >
+      <div
+        className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${colors[color]}`}
+      >
+        {icon}
+      </div>
+
+      <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+      <p className="text-white/80">{value}</p>
+      <p className="text-white/40 text-sm mt-1">{sub}</p>
+
+      <div className="flex items-center gap-2 mt-5 text-[#FFC400] text-sm">
+        Відкрити <ExternalLink size={14} />
+      </div>
+
+      {copyable && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            onCopy(value);
+          }}
+          className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center"
+        >
+          {copied ? (
+            <Check size={16} className="text-green-400" />
+          ) : (
+            <Copy size={16} />
+          )}
+        </button>
+      )}
+    </motion.div>
+  );
+
+  return external ? (
+    <a href={href} target="_blank" rel="noreferrer">
+      {content}
+    </a>
+  ) : (
+    <a href={href}>{content}</a>
+  );
+};
+
 const ContactInfo = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const sectionRef = useRef(null);
@@ -24,74 +94,6 @@ const ContactInfo = () => {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const Card = ({
-    title,
-    value,
-    sub,
-    href,
-    icon,
-    color = "yellow",
-    external,
-    onCopy,
-    copyable,
-  }) => {
-    const colors = {
-      yellow: "text-[#FFC400] bg-[#FFC400]/10",
-      green: "text-green-400 bg-green-500/10",
-      blue: "text-sky-400 bg-sky-500/10",
-      purple: "text-purple-400 bg-purple-500/10",
-      pink: "text-pink-400 bg-pink-500/10",
-    };
-
-    const content = (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -8 }}
-        className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-500 hover:border-[#FFC400]/40"
-      >
-        <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${colors[color]}`}
-        >
-          {icon}
-        </div>
-
-        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-white/80">{value}</p>
-        <p className="text-white/40 text-sm mt-1">{sub}</p>
-
-        <div className="flex items-center gap-2 mt-5 text-[#FFC400] text-sm">
-          Відкрити <ExternalLink size={14} />
-        </div>
-
-        {copyable && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              onCopy(value);
-            }}
-            className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center"
-          >
-            {copiedEmail ? (
-              <Check size={16} className="text-green-400" />
-            ) : (
-              <Copy size={16} />
-            )}
-          </button>
-        )}
-      </motion.div>
-    );
-
-    return external ? (
-      <a href={href} target="_blank" rel="noreferrer">
-        {content}
-      </a>
-    ) : (
-      <a href={href}>{content}</a>
-    );
   };
 
   return (
@@ -108,7 +110,7 @@ const ContactInfo = () => {
           preserveAspectRatio="none"
         >
           <path
-            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28c70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08c36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
             fill="#ffffff"
           />
         </svg>
@@ -117,7 +119,7 @@ const ContactInfo = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-5xl font-bold">
-            Наші <span className="#FFC400 text-[#FFC400]">контакти</span>
+            Наші <span className="text-[#FFC400]">контакти</span>
           </h2>
           <p className="text-white/60 mt-4">
             Зв'яжіться з нами будь-яким способом
@@ -134,6 +136,7 @@ const ContactInfo = () => {
             color="yellow"
             copyable
             onCopy={copyEmail}
+            copied={copiedEmail}
           />
 
           <Card
@@ -170,7 +173,6 @@ const ContactInfo = () => {
             sub="Фото та роботи"
             href="https://www.instagram.com/computer_center_stryi"
             external
-            color="pink"
             icon={
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <rect
@@ -186,6 +188,7 @@ const ContactInfo = () => {
                 <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
               </svg>
             }
+            color="pink"
           />
 
           <Card
