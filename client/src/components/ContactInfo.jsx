@@ -1,217 +1,220 @@
-import { Mail, MapPin, MessageCircle, Send } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useScrollReveal } from "../hooks/useScrollReveal";
+import {
+  Mail,
+  MapPin,
+  MessageCircle,
+  Send,
+  Phone,
+  Clock,
+  ExternalLink,
+  Copy,
+  Check,
+} from "lucide-react";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 const ContactInfo = () => {
-  const isRevealed = useScrollReveal();
-  const [isMobile, setIsMobile] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const sectionRef = useRef(null);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const copyEmail = async (email) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const Card = ({
+    title,
+    value,
+    sub,
+    href,
+    icon,
+    color = "yellow",
+    external,
+    onCopy,
+    copyable,
+  }) => {
+    const colors = {
+      yellow: "text-[#FFC400] bg-[#FFC400]/10",
+      green: "text-green-400 bg-green-500/10",
+      blue: "text-sky-400 bg-sky-500/10",
+      purple: "text-purple-400 bg-purple-500/10",
+      pink: "text-pink-400 bg-pink-500/10",
+    };
+
+    const content = (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        whileHover={{ y: -8 }}
+        className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-500 hover:border-[#FFC400]/40"
+      >
+        <div
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${colors[color]}`}
+        >
+          {icon}
+        </div>
+
+        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+        <p className="text-white/80">{value}</p>
+        <p className="text-white/40 text-sm mt-1">{sub}</p>
+
+        <div className="flex items-center gap-2 mt-5 text-[#FFC400] text-sm">
+          Відкрити <ExternalLink size={14} />
+        </div>
+
+        {copyable && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              onCopy(value);
+            }}
+            className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center"
+          >
+            {copiedEmail ? (
+              <Check size={16} className="text-green-400" />
+            ) : (
+              <Copy size={16} />
+            )}
+          </button>
+        )}
+      </motion.div>
+    );
+
+    return external ? (
+      <a href={href} target="_blank" rel="noreferrer">
+        {content}
+      </a>
+    ) : (
+      <a href={href}>{content}</a>
+    );
+  };
 
   return (
-    <section className="py-12 md:py-24 bg-white scroll-mt-25" id="contacts">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* HEADER */}
-        <div
-          data-reveal="contact-header"
-          className={`text-center mb-10 md:mb-14 transition-all duration-700 ${
-            isRevealed("contact-header")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-          }`}
+    <section
+      ref={sectionRef}
+      id="contacts"
+      className="relative py-20 bg-[#07111C] text-white overflow-hidden"
+    >
+      {/* СТАТИЧНА БІЛА ХВИЛЯ ЗВЕРХУ */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg
+          className="block w-full h-[80px]"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
         >
-          <div className="w-12 md:w-16 h-[2px] bg-[#FFC400] mx-auto mb-3 md:mb-4" />
+          <path
+            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+            fill="#ffffff"
+          />
+        </svg>
+      </div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-[Montserrat] text-[#1F2933]">
-            Наші <span className="text-[#FFC400]">контакти</span>
+      <div className="relative z-10 max-w-7xl mx-auto px-4">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-5xl font-bold">
+            Наші <span className="#FFC400 text-[#FFC400]">контакти</span>
           </h2>
-
-          <p className="text-gray-500 mt-2 font-[Inter] text-sm sm:text-base">
-            Напишіть або знайдіть нас у соцмережах
+          <p className="text-white/60 mt-4">
+            Зв'яжіться з нами будь-яким способом
           </p>
         </div>
 
-        {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* EMAIL */}
-          <a
-            data-reveal="contact-email"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card
+            title="Email"
+            value="computer_center@ukr.net"
+            sub="Відповідаємо швидко"
             href="mailto:computer_center@ukr.net"
-            className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-email")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-[#FFC400]/10 flex items-center justify-center">
-              <Mail className="text-[#FFC400] w-5 h-5 md:w-6 md:h-6" />
-            </div>
+            icon={<Mail />}
+            color="yellow"
+            copyable
+            onCopy={copyEmail}
+          />
 
-            <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-              Email
-            </h3>
+          <Card
+            title="Телефон"
+            value="+38 (099) 424-95-45"
+            sub="Пн-Пт 9:00 - 18:00"
+            href="tel:+380994249545"
+            icon={<Phone />}
+            color="green"
+          />
 
-            <div className="text-[#FFC400] font-[Inter] break-all text-sm md:text-base">
-              computer_center@ukr.net
-            </div>
-          </a>
-
-          {/* TELEGRAM */}
-          <a
-            data-reveal="contact-telegram"
+          <Card
+            title="Telegram"
+            value="@cbc_stryi"
+            sub="Швидка відповідь"
             href="https://t.me/cbc_stryi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-telegram")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-[#26A5E4]/10 flex items-center justify-center">
-              <Send className="text-[#26A5E4] w-5 h-5 md:w-6 md:h-6" />
-            </div>
+            external
+            icon={<Send />}
+            color="blue"
+          />
 
-            <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-              Telegram
-            </h3>
-
-            <div className="text-gray-700 font-[Inter] text-sm md:text-base">
-              @cbc_stryi
-            </div>
-          </a>
-
-          {/* VIBER */}
-          <a
-            data-reveal="contact-viber"
+          <Card
+            title="Viber"
+            value="Написати в Viber"
+            sub="Миттєві повідомлення"
             href="viber://chat?number=%2B380994249545"
-            className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-viber")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-[#7360F2]/10 flex items-center justify-center">
-              <MessageCircle className="text-[#7360F2] w-5 h-5 md:w-6 md:h-6" />
-            </div>
+            icon={<MessageCircle />}
+            color="purple"
+          />
 
-            <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-              Viber
-            </h3>
-
-            <div className="text-gray-700 font-[Inter] text-sm md:text-base">
-              Написати в Viber
-            </div>
-          </a>
-
-          {/* INSTAGRAM (НЕ ТРОГАВ) */}
-          <a
-            data-reveal="contact-instagram"
+          <Card
+            title="Instagram"
+            value="@computer_center_stryi"
+            sub="Фото та роботи"
             href="https://www.instagram.com/computer_center_stryi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-instagram")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center">
-              <svg
-                className="w-5 h-5 md:w-6 md:h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle cx="17" cy="7" r="1.5" fill="currentColor" />
+            external
+            color="pink"
+            icon={
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" />
+                <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
               </svg>
-            </div>
+            }
+          />
 
-            <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-              Instagram
-            </h3>
-
-            <div className="text-gray-700 font-[Inter] text-sm md:text-base">
-              @computer_center_stryi
-            </div>
-          </a>
-
-          {/* TIKTOK (ПОВЕРНУТО ЯК БУЛО — НЕ ЛАМАВ) */}
-          <a
-            data-reveal="contact-tiktok"
+          <Card
+            title="TikTok"
+            value="@computer_center_stryi"
+            sub="Цікавий контент"
             href="https://www.tiktok.com/@computer_center_stryi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group border border-gray-200 rounded-2xl p-4 md:p-6 text-center shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-tiktok")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-full bg-black flex items-center justify-center">
+            external
+            icon={
               <svg
-                className="w-5 h-5 md:w-6 md:h-6 text-white"
-                fill="currentColor"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
+                fill="currentColor"
               >
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                <path d="M19.6 6.7a4.8 4.8 0 0 1-3.8-4.2H12v13.6a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.4a6.3 6.3 0 1 0 0 12.6 6.3 6.3 0 0 0 6.3-6.3V9.2a8.2 8.2 0 0 0 3.3 1.5V6.7z" />
               </svg>
-            </div>
+            }
+            color="yellow"
+          />
+        </div>
 
-            <h3 className="text-base md:text-lg font-bold text-[#1F2933] mb-2 font-[Montserrat]">
-              TikTok
-            </h3>
-
-            <div className="text-gray-700 font-[Inter] text-sm md:text-base">
-              @computer_center_stryi
-            </div>
-          </a>
-
-          {/* ADDRESS */}
-          <a
-            data-reveal="contact-address"
-            href="https://www.google.com/maps/search/?api=1&query=м.+Стрий,+вул.+Незалежності,+17"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group relative border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-700 block ${
-              isRevealed("contact-address")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-          >
-            {/* MAP BACKGROUND */}
-            <iframe
-              src="https://www.google.com/maps?q=м.+Стрий,+вул.+Незалежності,+17&output=embed"
-              className="absolute inset-0 w-full h-full"
-              loading="lazy"
-            />
-
-            {/* dark overlay */}
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition" />
-
-            {/* TEXT OVERLAY */}
-            <div className="relative z-10 p-6 text-center text-white">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-white/20 flex items-center justify-center">
-                <MapPin className="w-5 h-5" />
-              </div>
-
-              <h3 className="text-base md:text-lg font-bold mb-2 font-[Montserrat]">
-                Адреса
-              </h3>
-
-              <div className="text-sm md:text-base font-[Inter]">
-                м. Стрий, вул. Незалежності, 17
-              </div>
-            </div>
-          </a>
+        <div className="mt-10 rounded-3xl overflow-hidden border border-white/10">
+          <iframe
+            src="https://www.google.com/maps?q=м.+Стрий,+вул.+Незалежності,+17&output=embed"
+            className="w-full h-[300px]"
+            loading="lazy"
+            title="Google Maps"
+          />
         </div>
       </div>
     </section>

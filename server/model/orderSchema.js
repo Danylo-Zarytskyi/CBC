@@ -1,3 +1,4 @@
+// orderSchema.js
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
@@ -7,11 +8,20 @@ const orderSchema = new mongoose.Schema(
     service: String,
     comment: String,
 
-    files: [String],
+    files: [
+      {
+        filename: String,
+        originalName: String,
+        path: String,
+        size: Number,
+        mimetype: String,
+      },
+    ],
 
     status: {
       type: String,
-      default: "new",
+      enum: ["pending", "processing", "done", "cancelled"],
+      default: "pending",
     },
   },
   { timestamps: true },

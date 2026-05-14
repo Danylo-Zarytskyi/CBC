@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import orderRoutes from "./routes/orderRoute.js";
 import adminRoutes from "./routes/adminRoute.js";
@@ -11,21 +14,39 @@ import workRoute from "./routes/workRoute.js";
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
+// Перевірка і створення папки uploads
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log("📁 Папку 'uploads' створено");
+}
+
+// CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173"],
     credentials: true,
   }),
 );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+
+// Helmet з налаштуваннями для файлів
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+  }),
+);
 
 // ✅ STATIC FILES
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ROUTES
 app.use("/api/orders", orderRoutes);
@@ -41,8 +62,12 @@ app.use("*", (req, res) => {
 
 // ERROR HANDLER
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ success: false, message: "Щось пішло не так!" });
+  console.error("❌ Помилка:", err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Щось пішло не так!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  });
 });
 
 export default app;

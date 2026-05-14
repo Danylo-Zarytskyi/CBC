@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { Send, Info } from "lucide-react";
+import { Send, Info, X } from "lucide-react";
+import { toast } from "react-toastify";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const ContactForm = () => {
   const isRevealed = useScrollReveal();
+
   const [showInfo, setShowInfo] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +41,12 @@ const ContactForm = () => {
   const handleFiles = (e) => {
     const selected = Array.from(e.target.files);
 
+    // Перевірка на пусте поле
+    if (selected.length === 0) {
+      setFileError("");
+      return;
+    }
+
     const maxSize = 5 * 1024 * 1024; // 5MB
     const validFiles = [];
     let error = "";
@@ -46,13 +54,33 @@ const ContactForm = () => {
     for (let file of selected) {
       if (file.size > maxSize) {
         error = "Кожен файл має бути менше 5MB";
+        toast.error(`Файл ${file.name} завеликий`);
         continue;
       }
       validFiles.push(file);
     }
 
+    // Перевірка на дублікати
+    const uniqueFiles = validFiles.filter((file) => {
+      return !files.some(
+        (existing) =>
+          existing.name === file.name && existing.size === file.size,
+      );
+    });
+
+    if (uniqueFiles.length !== validFiles.length) {
+      toast.warning("Деякі файли вже додані");
+    }
+
     setFileError(error);
-    setFiles(validFiles);
+    setFiles([...files, ...uniqueFiles]);
+
+    // Очищаємо input
+    e.target.value = null;
+  };
+
+  const removeFile = (indexToRemove) => {
+    setFiles(files.filter((_, index) => index !== indexToRemove));
   };
 
   const validate = () => {
@@ -67,12 +95,18 @@ const ContactForm = () => {
     }
 
     const cleanedPhone = form.phone.replace(/[^\d]/g, "");
+
     if (cleanedPhone.length < 10) {
       newErrors.phone = "Некоректний номер телефону";
     }
 
     if (!form.comment || form.comment.trim().length < 20) {
       newErrors.comment = "Опис має бути мінімум 20 символів";
+    }
+
+    // Валідація на наявність хоча б одного файлу
+    if (files.length === 0) {
+      newErrors.files = "Додайте хоча б один файл";
     }
 
     setErrors(newErrors);
@@ -83,8 +117,15 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return;
-    if (fileError) return;
+    if (!validate()) {
+      toast.error("Перевірте правильність даних");
+      return;
+    }
+
+    if (fileError) {
+      toast.error(fileError);
+      return;
+    }
 
     try {
       setLoading(true);
@@ -112,6 +153,8 @@ const ContactForm = () => {
 
       console.log("SUCCESS:", data);
 
+      toast.success("Заявку успішно надіслано 🚀");
+
       setForm({
         name: "",
         phone: "",
@@ -124,6 +167,8 @@ const ContactForm = () => {
       setErrors({});
     } catch (err) {
       console.log(err);
+
+      toast.error("Помилка при відправці заявки");
     } finally {
       setLoading(false);
     }
@@ -174,7 +219,7 @@ const ContactForm = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Ваше ім'я"
-                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white"
+                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
                   />
 
                   {errors.name && (
@@ -192,7 +237,7 @@ const ContactForm = () => {
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="Номер телефону"
-                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white"
+                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
                   />
 
                   {errors.phone && (
@@ -204,24 +249,51 @@ const ContactForm = () => {
               {/* FILES */}
               <div>
                 <label className="block text-white mb-2 font-[Inter]">
-                  Файли / фото (до 5MB)
+                  Файли / фото (до 5MB на файл)
                 </label>
 
                 <input
                   type="file"
                   multiple
                   onChange={handleFiles}
-                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white"
+                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white cursor-pointer"
                 />
+
+                {errors.files && (
+                  <p className="text-red-400 text-xs mt-1">{errors.files}</p>
+                )}
 
                 {fileError && (
                   <p className="text-red-400 text-xs mt-1">{fileError}</p>
                 )}
 
+                {/* Список вибраних файлів */}
                 {files.length > 0 && (
-                  <p className="text-gray-300 text-xs mt-1">
-                    Вибрано файлів: {files.length}
-                  </p>
+                  <div className="mt-3 space-y-2">
+                    <p className="text-gray-300 text-sm">
+                      Вибрано файлів: {files.length}
+                    </p>
+                    <div className="space-y-1 max-h-40 overflow-y-auto">
+                      {files.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-black/50 p-2 rounded-lg"
+                        >
+                          <span className="text-white text-xs truncate flex-1">
+                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)}{" "}
+                            MB)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(index)}
+                            className="text-red-400 hover:text-red-300 ml-2"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
 
@@ -235,7 +307,7 @@ const ContactForm = () => {
                   name="service"
                   value={form.service}
                   onChange={handleChange}
-                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white"
+                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
                 >
                   {services.map((s, i) => (
                     <option key={i} value={s}>
@@ -257,13 +329,13 @@ const ContactForm = () => {
                   onChange={handleChange}
                   rows={5}
                   placeholder="Опишіть замовлення"
-                  className="w-full p-3 pr-12 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white"
+                  className="w-full p-3 pr-12 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowInfo(true)}
-                  className="absolute top-10 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-[#FFC400]/10 text-[#FFC400]"
+                  className="absolute top-10 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-[#FFC400]/10 text-[#FFC400] hover:bg-[#FFC400]/20 transition cursor-pointer"
                 >
                   <Info size={16} />
                 </button>
@@ -277,9 +349,10 @@ const ContactForm = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-[#FFC400] text-[#1F2933] py-3 rounded-xl font-bold"
+                className="w-full flex items-center justify-center gap-2 bg-[#FFC400] text-[#1F2933] py-3 rounded-xl font-bold hover:opacity-90 transition cursor-pointer disabled:opacity-50"
               >
                 <Send size={18} />
+
                 {loading ? "Відправка..." : "Надіслати заявку"}
               </button>
             </form>
@@ -310,7 +383,7 @@ const ContactForm = () => {
 
             <button
               onClick={() => setShowInfo(false)}
-              className="mt-5 w-full bg-[#FFC400] text-black py-2 rounded-xl font-semibold"
+              className="mt-5 w-full bg-[#FFC400] text-black py-2 rounded-xl font-semibold hover:opacity-90 transition cursor-pointer"
             >
               Зрозуміло
             </button>
