@@ -55,7 +55,7 @@ const Header = () => {
     <>
       <header
         data-reveal="header"
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
           scrolled
             ? "bg-[#07111C]/95 backdrop-blur-xl border-b border-white/10 shadow-xl"
             : "bg-[#07111C] border-b border-white/5"
@@ -65,7 +65,7 @@ const Header = () => {
             : "opacity-0 -translate-y-4"
         }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-2 md:py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 h-[72px] md:h-[88px]">
           {/* LOGO */}
           <button
             onClick={() => handleScroll("home")}
@@ -73,7 +73,7 @@ const Header = () => {
           >
             <img
               src="https://i.ibb.co/zHnvcYg5/image.png"
-              className="h-18 md:h-22"
+              className="h-[78px] md:h-[96px] object-contain"
               alt="Computer Center Stryi Logo"
             />
           </button>
@@ -112,7 +112,6 @@ const Header = () => {
                 +38 (099) 424-95-45
               </a>
 
-              {/* SOCIALS */}
               <div className="flex items-center gap-2 mt-1">
                 <button
                   onClick={() =>
@@ -132,6 +131,7 @@ const Header = () => {
                   <MessageCircle className="w-3.5 h-3.5 text-white" />
                 </button>
 
+                {/* INSTAGRAM FIXED ICON */}
                 <button
                   onClick={() =>
                     window.open(
@@ -139,7 +139,7 @@ const Header = () => {
                       "_blank",
                     )
                   }
-                  className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#FEDA77] via-[#D62976] to-[#962FBF] flex items-center justify-center hover:scale-110 transition"
+                  className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#FEDA77] via-[#D62976] to-[#962FBF] flex items-center justify-center hover:scale-110 transition shadow-md"
                 >
                   <svg
                     className="w-3.5 h-3.5 text-white"
@@ -150,9 +150,9 @@ const Header = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <circle cx="12" cy="12" r="5" />
-                    <circle cx="17" cy="7" r="1" fill="currentColor" />
+                    <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
                   </svg>
                 </button>
 
@@ -170,37 +170,8 @@ const Header = () => {
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25H12.3v13.67a2.89 2.89 0 1 1-2.9-2.9c.3 0 .6.05.88.13V9.4A6.33 6.33 0 1 0 16 15.7V8.7a8.16 8.16 0 0 0 3.59-2.01z" />
                   </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* TABLET SOCIALS */}
-            <div className="hidden md:flex lg:hidden flex-col items-center">
-              <a
-                href="tel:+380994249545"
-                className="text-white text-xs px-2 py-1 rounded-lg bg-white/5 hover:text-[#FFC400]"
-              >
-                📞 099 42 49 545
-              </a>
-
-              <div className="flex gap-1 mt-1">
-                <button
-                  onClick={() =>
-                    window.open("https://t.me/cbc_stryi", "_blank")
-                  }
-                  className="w-6 h-6 rounded-full bg-[#26A5E4] flex items-center justify-center hover:scale-110 transition"
-                >
-                  <Send className="w-3 h-3 text-white" />
-                </button>
-                <button
-                  onClick={() =>
-                    window.open("viber://chat?number=%2B380994249545", "_blank")
-                  }
-                  className="w-6 h-6 rounded-full bg-[#7360F2] flex items-center justify-center hover:scale-110 transition"
-                >
-                  <MessageCircle className="w-3 h-3 text-white" />
                 </button>
               </div>
             </div>
@@ -218,8 +189,10 @@ const Header = () => {
 
         {/* MOBILE OVERLAY */}
         <div
-          className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition md:hidden ${
-            mobileOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity md:hidden ${
+            mobileOpen
+              ? "opacity-100 visible"
+              : "opacity-0 invisible pointer-events-none"
           }`}
           onClick={() => setMobileOpen(false)}
         />
@@ -233,13 +206,12 @@ const Header = () => {
           <div className="flex justify-between items-center p-6 border-b border-white/10">
             <img
               src="https://i.ibb.co/zHnvcYg5/image.png"
-              className="h-12"
+              className="h-12 object-contain"
               alt="logo"
             />
             <button
               onClick={() => setMobileOpen(false)}
               className="text-white/70 hover:text-white p-2"
-              aria-label="Закрити"
             >
               <X size={24} />
             </button>
@@ -268,8 +240,6 @@ const Header = () => {
           </div>
         </div>
       </header>
-
-      <div className="h-24 md:h-28" />
     </>
   );
 };

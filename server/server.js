@@ -29,7 +29,7 @@ if (!fs.existsSync(uploadDir)) {
 // CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://cbc-nine.vercel.app/"],
     credentials: true,
   }),
 );

@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-[#07111C] min-h-screen text-white relative">
+    <div className="p-16 bg-[#07111C] min-h-screen text-white relative">
       {/* TOP ADMIN BAR - тепер ліворуч, щоб не перекривати сайдбар */}
       <div className="fixed top-4 left-4 z-40 flex gap-2 items-center">
         <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 px-3 py-1.5">
