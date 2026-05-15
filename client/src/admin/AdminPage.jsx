@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import api from "./api"; // Імпортуємо налаштований axios
 
 import AdminDashboard from "./AdminDashboard";
 
@@ -11,12 +11,10 @@ const AdminPage = () => {
 
   const handleLogin = async (credentialResponse) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/auth/google",
-        {
-          credential: credentialResponse.credential,
-        },
-      );
+      // ТЕПЕР ВИКОРИСТОВУЄМО НАЛАШТОВАНИЙ api ЗАМІСТЬ ПРЯМОГО axios
+      const { data } = await api.post("/api/auth/google", {
+        credential: credentialResponse.credential,
+      });
 
       localStorage.setItem("token", data.accessToken);
       setToken(data.accessToken);
@@ -35,7 +33,6 @@ const AdminPage = () => {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-[#07111C]">
         <h1 className="text-white mb-6 text-2xl">Admin access</h1>
-
         <GoogleLogin onSuccess={handleLogin} />
       </div>
     );
@@ -45,7 +42,6 @@ const AdminPage = () => {
     <div>
       <div className="flex justify-between items-center p-4 bg-[#0F0B00] border-b border-[#FFC400]/30">
         <h1 className="text-[#FFC400] font-bold">Admin Panel</h1>
-
         <button
           onClick={logout}
           className="bg-red-500 px-3 py-1 rounded text-white"
@@ -53,7 +49,6 @@ const AdminPage = () => {
           Logout
         </button>
       </div>
-
       <AdminDashboard />
     </div>
   );

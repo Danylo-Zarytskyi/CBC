@@ -1,27 +1,60 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/api"; // ВИКОРИСТОВУЄМО налаштований api ЗАМІСТЬ прямого axios
 
 const Works = () => {
   const [works, setWorks] = useState([]);
+  const [loading, setLoading] = useState(true); // Додаємо стан завантаження
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/works");
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios з хардкодним URL
+        const res = await api.get("/api/works");
         setWorks(res.data);
       } catch (err) {
         console.log("WORKS ERROR:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchWorks();
   }, []);
 
-  if (!works.length) {
+  // Показуємо індикатор завантаження поки йде запит
+  if (loading) {
     return (
       <section className="bg-white py-24 text-center">
-        <p className="text-gray-500">Завантаження...</p>
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-12 h-12 border-4 border-[#FFC400] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-500 mt-4">Завантаження робіт...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Якщо немає робіт, показуємо повідомлення
+  if (!works.length) {
+    return (
+      <section
+        className="bg-white py-24 text-center scroll-mt-24"
+        id="portfolio"
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-14">
+            <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2933] font-[Montserrat]">
+              Наші <span className="text-[#FFC400]">роботи</span>
+            </h2>
+            <p className="text-gray-500 mt-2 font-[Inter]">
+              Приклади виконаних замовлень
+            </p>
+          </div>
+          <p className="text-gray-500">Немає робіт у портфоліо</p>
+        </div>
       </section>
     );
   }
@@ -55,15 +88,24 @@ const Works = () => {
             >
               <div className="h-64 overflow-hidden bg-gray-100">
                 <img
-                  src={w.image}
+                  src={
+                    w.image ||
+                    "https://via.placeholder.com/400x300?text=No+Image"
+                  }
                   alt={w.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/400x300?text=Image+Not+Found";
+                  }}
                 />
               </div>
 
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
                 <h3 className="text-white text-lg font-bold">{w.title}</h3>
-                <p className="text-gray-200 text-sm">{w.desc}</p>
+                {w.desc && (
+                  <p className="text-gray-200 text-sm mt-1">{w.desc}</p>
+                )}
               </div>
             </motion.div>
           ))}

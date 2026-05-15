@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/api"; // ВИКОРИСТОВУЄМО налаштований api ЗАМІСТЬ прямого axios
 import { Sparkles, ArrowRight, ShieldCheck, Clock3 } from "lucide-react";
 
 const PopularServices = () => {
@@ -12,9 +12,8 @@ const PopularServices = () => {
       try {
         setLoading(true);
 
-        const res = await axios.get(
-          "http://localhost:4000/api/popular-services",
-        );
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios з хардкодним URL
+        const res = await api.get("/api/popular-services");
 
         setServices(res.data || []);
       } catch (err) {
@@ -124,21 +123,30 @@ const PopularServices = () => {
               {/* IMAGE */}
               <div className="relative h-[260px] overflow-hidden">
                 <img
-                  src={s.image}
+                  src={
+                    s.image ||
+                    "https://via.placeholder.com/400x300?text=No+Image"
+                  }
                   alt={s.title}
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/400x300?text=Image+Not+Found";
+                  }}
                 />
 
                 {/* OVERLAY */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
 
                 {/* PRICE */}
-                <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md shadow-lg">
-                  <span className="text-[#111827] font-bold text-sm">
-                    {s.price}
-                  </span>
-                </div>
+                {s.price && (
+                  <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md shadow-lg">
+                    <span className="text-[#111827] font-bold text-sm">
+                      {s.price}
+                    </span>
+                  </div>
+                )}
 
                 {/* BADGES */}
                 <div className="absolute bottom-4 left-4 flex gap-2">
@@ -160,9 +168,11 @@ const PopularServices = () => {
                   {s.title}
                 </h3>
 
-                <p className="text-gray-500 mt-4 leading-relaxed text-sm">
-                  {s.desc}
-                </p>
+                {s.desc && (
+                  <p className="text-gray-500 mt-4 leading-relaxed text-sm">
+                    {s.desc}
+                  </p>
+                )}
 
                 {/* FOOTER */}
                 <div className="flex items-center justify-between mt-8 gap-4">
@@ -172,7 +182,7 @@ const PopularServices = () => {
                     </p>
 
                     <p className="text-2xl font-black text-[#FFC400]">
-                      {s.price}
+                      {s.price || "Договірна"}
                     </p>
                   </div>
 

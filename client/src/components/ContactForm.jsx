@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/api"; // Імпортуємо налаштований axios ЗАМІСТЬ прямого axios
 import { Send, Info, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -141,15 +141,12 @@ const ContactForm = () => {
         formData.append("files", file);
       });
 
-      const { data } = await axios.post(
-        "http://localhost:4000/api/orders",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios з хардкодним URL
+      const { data } = await api.post("/api/orders", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       console.log("SUCCESS:", data);
 

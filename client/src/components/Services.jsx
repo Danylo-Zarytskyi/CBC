@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import api from "../api/api"; // ВИКОРИСТОВУЄМО налаштований api ЗАМІСТЬ прямого axios
 import {
   ChevronRight,
   Package,
@@ -62,7 +62,8 @@ const Services = () => {
     const fetchServices = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:4000/api/services");
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios з хардкодним URL
+        const res = await api.get("/api/services");
         setData(res.data);
         setError(null);
       } catch (err) {
@@ -263,7 +264,7 @@ const Services = () => {
             <div className="bg-gradient-to-r from-[#FFC400] to-[#FFD700] px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-[#1F2933]">
-                  {getServiceIcon(data[active]?.title)}
+                  {data[active] && getServiceIcon(data[active].title)}
                 </div>
                 <div>
                   <h3 className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#1F2933]">

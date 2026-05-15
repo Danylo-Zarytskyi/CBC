@@ -1,5 +1,6 @@
+import api from "../api/api";
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+// ВИДАЛЯЄМО непотрібний імпорт axios
 import {
   Plus,
   Edit,
@@ -14,7 +15,8 @@ import {
   Eye,
 } from "lucide-react";
 
-const API = "http://localhost:4000/api/works";
+// ВИДАЛЯЄМО хардкодну змінну API
+// const API = "http://localhost:4000/api/works";
 
 const AdminWorks = () => {
   const [works, setWorks] = useState([]);
@@ -30,7 +32,8 @@ const AdminWorks = () => {
   const fetchWorks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      const res = await api.get("/api/works");
       setWorks(res.data || []);
     } catch (err) {
       console.log(err);
@@ -63,9 +66,11 @@ const AdminWorks = () => {
     setSubmitting(true);
     try {
       if (editId) {
-        await axios.put(`${API}/${editId}`, form);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.put(`/api/works/${editId}`, form);
       } else {
-        await axios.post(API, form);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.post("/api/works", form);
       }
 
       reset();
@@ -88,7 +93,8 @@ const AdminWorks = () => {
   const remove = async (id) => {
     if (!confirm("Ви впевнені, що хочете видалити цю роботу?")) return;
     try {
-      await axios.delete(`${API}/${id}`);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      await api.delete(`/api/works/${id}`);
       fetchWorks();
     } catch (err) {
       console.log(err);

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import api from "../api/api"; // Імпортуємо налаштований axios
 import {
   X,
   Plus,
@@ -13,8 +13,6 @@ import {
   RefreshCw,
   Star,
 } from "lucide-react";
-
-const API = "http://localhost:4000/api/popular-services";
 
 const AdminPopularServices = () => {
   const [items, setItems] = useState([]);
@@ -36,7 +34,8 @@ const AdminPopularServices = () => {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      const res = await api.get("/api/popular-services");
       setItems(res.data || []);
     } catch (err) {
       console.log(err);
@@ -72,9 +71,11 @@ const AdminPopularServices = () => {
     setSubmitting(true);
     try {
       if (editId) {
-        await axios.put(`${API}/${editId}`, form);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.put(`/api/popular-services/${editId}`, form);
       } else {
-        await axios.post(API, form);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.post("/api/popular-services", form);
       }
 
       reset();
@@ -101,7 +102,8 @@ const AdminPopularServices = () => {
   const remove = async (id) => {
     if (!confirm("Ви впевнені, що хочете видалити цю послугу?")) return;
     try {
-      await axios.delete(`${API}/${id}`);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      await api.delete(`/api/popular-services/${id}`);
       fetchItems();
     } catch (err) {
       console.log(err);

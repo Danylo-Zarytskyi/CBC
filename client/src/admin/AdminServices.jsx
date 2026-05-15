@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import api from "../api/api"; // Імпортуємо налаштований axios
 import {
   Plus,
   Edit,
@@ -13,8 +13,6 @@ import {
   RefreshCw,
   AlertCircle,
 } from "lucide-react";
-
-const API = "http://localhost:4000/api/services";
 
 const AdminServices = () => {
   const [services, setServices] = useState([]);
@@ -35,7 +33,8 @@ const AdminServices = () => {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      const res = await api.get("/api/services");
       setServices(res.data || []);
     } catch (err) {
       console.log(err);
@@ -87,9 +86,11 @@ const AdminServices = () => {
 
     try {
       if (editId) {
-        await axios.put(`${API}/${editId}`, payload);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.put(`/api/services/${editId}`, payload);
       } else {
-        await axios.post(API, payload);
+        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+        await api.post("/api/services", payload);
       }
 
       reset();
@@ -112,7 +113,8 @@ const AdminServices = () => {
   const remove = async (id) => {
     if (!confirm("Ви впевнені, що хочете видалити цю послугу?")) return;
     try {
-      await axios.delete(`${API}/${id}`);
+      // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios
+      await api.delete(`/api/services/${id}`);
       fetchServices();
     } catch (err) {
       console.log(err);

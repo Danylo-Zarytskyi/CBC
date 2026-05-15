@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 import {
   ClipboardList,
   ChevronLeft,
@@ -23,8 +23,6 @@ import {
   Package,
   MessageSquare,
 } from "lucide-react";
-
-const API = "http://localhost:4000/api/orders";
 
 const statuses = [
   {
@@ -102,7 +100,7 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API);
+      const res = await api.get("/api/orders");
       setOrders(res.data || []);
     } catch (err) {
       console.log(err);
@@ -123,7 +121,7 @@ const AdminOrders = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`${API}/${id}`, { status: newStatus });
+      await api.put(`/api/orders/${id}`, { status: newStatus });
       setOrders((prev) =>
         prev.map((o) => (o._id === id ? { ...o, status: newStatus } : o)),
       );
@@ -166,9 +164,10 @@ const AdminOrders = () => {
   };
 
   const handleDownload = (file) => {
+    const baseURL = import.meta.env.VITE_API_URL;
     const fileUrl = file.path
-      ? `http://localhost:4000/${file.path}`
-      : `http://localhost:4000/uploads/${file.filename}`;
+      ? `${baseURL}/${file.path}`
+      : `${baseURL}/uploads/${file.filename}`;
     window.open(fileUrl, "_blank");
   };
 
