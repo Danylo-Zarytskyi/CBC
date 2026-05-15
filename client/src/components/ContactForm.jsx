@@ -104,10 +104,7 @@ const ContactForm = () => {
       newErrors.comment = "Опис має бути мінімум 20 символів";
     }
 
-    // Валідація на наявність хоча б одного файлу
-    if (files.length === 0) {
-      newErrors.files = "Додайте хоча б один файл";
-    }
+    // ВАЛІДАЦІЮ НА ОБОВ'ЯЗКОВИЙ ФАЙЛ ПРИБРАНО
 
     setErrors(newErrors);
 
@@ -256,9 +253,7 @@ const ContactForm = () => {
                   className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white cursor-pointer"
                 />
 
-                {errors.files && (
-                  <p className="text-red-400 text-xs mt-1">{errors.files}</p>
-                )}
+                {/* ПОВІДОМЛЕННЯ ПРО ОБОВ'ЯЗКОВІСТЬ ФАЙЛУ ПРИБРАНО */}
 
                 {fileError && (
                   <p className="text-red-400 text-xs mt-1">{fileError}</p>
