@@ -13,6 +13,13 @@ import popularServicesRoute from "./routes/popularServicesRoute.js";
 import workRoute from "./routes/workRoute.js";
 
 dotenv.config();
+// Тимчасова діагностика
+console.log(
+  "🔍 MONGODB_URI:",
+  process.env.MONGODB_URI ? "✅ Отримано" : "❌ НІ",
+);
+console.log("🔍 JWT_SECRET:", process.env.JWT_SECRET ? "✅ Отримано" : "❌ НІ");
+console.log("🔍 PORT:", process.env.PORT);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
