@@ -8,7 +8,7 @@ const HowToOrder = () => {
 
   const steps = [
     {
-      title: "Оберіть послугу",
+      title: "Оберiть послугу",
       desc: "Виберіть, що вам потрібно",
       icon: <Package size={24} />,
     },
