@@ -9,13 +9,19 @@ const router = express.Router();
 //
 router.get("/", async (_, res) => {
   try {
-    const orders = await Order.find().sort({
-      createdAt: -1,
-    });
+    console.log("📦 Отримано запит на /api/orders");
+    console.log("🔍 Стан підключення MongoDB:", mongoose.connection.readyState);
 
+    // Ваш існуючий код...
+    const orders = await Order.find();
     res.json(orders);
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    console.error("❌ Помилка в /api/orders:", error);
+    res.status(500).json({
+      success: false,
+      message: "Помилка сервера",
+      error: error.message,
+    });
   }
 });
 
