@@ -5,6 +5,7 @@ import helmet from "helmet";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import dbRunner from "./bin/runners/db.js";
 
 import orderRoutes from "./routes/orderRoute.js";
 import adminRoutes from "./routes/adminRoute.js";
@@ -13,6 +14,7 @@ import popularServicesRoute from "./routes/popularServicesRoute.js";
 import workRoute from "./routes/workRoute.js";
 
 dotenv.config();
+dbRunner();
 // Тимчасова діагностика
 console.log(
   "🔍 MONGODB_URI:",
