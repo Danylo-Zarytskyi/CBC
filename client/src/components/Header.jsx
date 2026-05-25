@@ -33,22 +33,31 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScrollEvent);
   }, []);
 
+  // Блокування скролу при відкритому меню
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     }
-    return () => (document.body.style.overflow = "unset");
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
+  // Закриття меню при скролі
   useEffect(() => {
     if (!mobileOpen) return;
 
-    const onScroll = () => setMobileOpen(false);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const handleScrollClose = () => {
+      setMobileOpen(false);
+    };
 
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScrollClose, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollClose);
+    };
   }, [mobileOpen]);
 
   return (
@@ -131,7 +140,6 @@ const Header = () => {
                   <MessageCircle className="w-3.5 h-3.5 text-white" />
                 </button>
 
-                {/* INSTAGRAM FIXED ICON */}
                 <button
                   onClick={() =>
                     window.open(
@@ -178,68 +186,146 @@ const Header = () => {
 
             {/* MOBILE BTN */}
             <button
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition"
+              className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Закрити меню" : "Відкрити меню"}
             >
-              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileOpen ? (
+                <X size={24} className="text-[#FFC400]" />
+              ) : (
+                <Menu size={24} className="text-[#FFC400]" />
+              )}
             </button>
-          </div>
-        </div>
-
-        {/* MOBILE OVERLAY */}
-        <div
-          className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity md:hidden ${
-            mobileOpen
-              ? "opacity-100 visible"
-              : "opacity-0 invisible pointer-events-none"
-          }`}
-          onClick={() => setMobileOpen(false)}
-        />
-
-        {/* MOBILE MENU */}
-        <div
-          className={`fixed top-0 right-0 h-full w-80 bg-[#07111C] shadow-2xl z-50 transition-transform duration-300 md:hidden ${
-            mobileOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <div className="flex justify-between items-center p-6 border-b border-white/10">
-            <img
-              src="https://i.ibb.co/zHnvcYg5/image.png"
-              className="h-12 object-contain"
-              alt="logo"
-            />
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="text-white/70 hover:text-white p-2"
-            >
-              <X size={24} />
-            </button>
-          </div>
-
-          <nav className="p-6">
-            {items.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleScroll(item.id)}
-                className="block w-full text-left py-4 text-white/80 hover:text-[#FFC400] border-b border-white/5 transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="absolute bottom-8 left-6 right-6">
-            <a
-              href="tel:+380994249545"
-              className="flex items-center justify-center gap-2 w-full bg-[#FFC400] text-black py-3 rounded-xl font-semibold hover:bg-[#FFD84D] transition"
-            >
-              <Phone size={18} />
-              Зателефонувати
-            </a>
           </div>
         </div>
       </header>
+
+      {/* МОБІЛЬНЕ МЕНЮ - ВИНЕСЕНО ЗА МЕЖІ HEADER */}
+      <div
+        className={`fixed inset-0 z-[100] transition-all duration-300 lg:hidden ${
+          mobileOpen
+            ? "opacity-100 visible"
+            : "opacity-0 invisible pointer-events-none"
+        }`}
+      >
+        {/* ОВЕРЛЕЙ З ТЕМНИМ ФОНОМ */}
+        <div
+          className="absolute inset-0 bg-black/80 backdrop-blur-md"
+          onClick={() => setMobileOpen(false)}
+        />
+
+        {/* САМЕ МЕНЮ */}
+        <div
+          className={`absolute right-0 top-0 h-full w-full sm:w-96 bg-gradient-to-b from-[#07111C] to-[#0a1620] shadow-2xl transition-transform duration-300 ease-out ${
+            mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="relative h-full flex flex-col">
+            {/* ВЕРХНЯ ЧАСТИНА З ЛОГО */}
+            <div className="flex justify-between items-center p-6 border-b border-white/10 bg-[#07111C]/50">
+              <img
+                src="https://i.ibb.co/zHnvcYg5/image.png"
+                className="h-12 object-contain"
+                alt="logo"
+              />
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"
+                aria-label="Закрити"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* НАВІГАЦІЯ */}
+            <nav className="flex-1 overflow-y-auto px-6 py-4">
+              {items.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleScroll(item.id)}
+                  className="block w-full text-left py-4 px-4 text-white/80 hover:text-[#FFC400] hover:bg-white/10 rounded-xl transition-all duration-200 font-medium"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+
+            {/* НИЖНЯ ЧАСТИНА З КНОПКОЮ ТА СОЦМЕРЕЖАМИ */}
+            <div className="p-6 pt-4 border-t border-white/10 bg-[#07111C]/30">
+              <a
+                href="tel:+380994249545"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#FFC400] to-[#FFD84D] text-black py-3.5 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200"
+              >
+                <Phone size={18} />
+                Зателефонувати
+              </a>
+
+              {/* СОЦМЕРЕЖІ В МОБІЛЬНОМУ МЕНЮ */}
+              <div className="flex items-center justify-center gap-4 mt-6">
+                <button
+                  onClick={() =>
+                    window.open("https://t.me/cbc_stryi", "_blank")
+                  }
+                  className="w-10 h-10 rounded-full bg-[#26A5E4] flex items-center justify-center hover:scale-110 transition shadow-lg"
+                >
+                  <Send className="w-4 h-4 text-white" />
+                </button>
+
+                <button
+                  onClick={() =>
+                    window.open("viber://chat?number=%2B380994249545", "_blank")
+                  }
+                  className="w-10 h-10 rounded-full bg-[#7360F2] flex items-center justify-center hover:scale-110 transition shadow-lg"
+                >
+                  <MessageCircle className="w-4 h-4 text-white" />
+                </button>
+
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://www.instagram.com/computer_center_stryi",
+                      "_blank",
+                    )
+                  }
+                  className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FEDA77] via-[#D62976] to-[#962FBF] flex items-center justify-center hover:scale-110 transition shadow-lg"
+                >
+                  <svg
+                    className="w-4 h-4 text-white"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://www.tiktok.com/@computer_center_stryi",
+                      "_blank",
+                    )
+                  }
+                  className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:scale-110 transition shadow-lg"
+                >
+                  <svg
+                    className="w-4 h-4 text-white"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25H12.3v13.67a2.89 2.89 0 1 1-2.9-2.9c.3 0 .6.05.88.13V9.4A6.33 6.33 0 1 0 16 15.7V8.7a8.16 8.16 0 0 0 3.59-2.01z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

@@ -30,9 +30,9 @@ function HomePage() {
         <Hero />
         <PopularServices />
         <Services />
-        <HowToOrder />
         <Advantages />
         <Works />
+        <HowToOrder />
         <ContactInfo />
         <ContactForm />
       </main>
