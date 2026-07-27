@@ -6,18 +6,6 @@ import {
   DollarSign,
   Layers,
   AlertCircle,
-  Printer,
-  Camera,
-  CreditCard,
-  FolderOpen,
-  RectangleHorizontal,
-  Sticker,
-  Gift,
-  Brush,
-  FileText,
-  Image,
-  BadgeCheck,
-  Megaphone,
   Star,
 } from "lucide-react";
 
@@ -29,32 +17,26 @@ const Services = () => {
 
   const sectionRef = useRef(null);
 
-  // Мапа іконок для різних типів послуг
-  const getServiceIcon = (title) => {
-    const titleLower = title.toLowerCase();
-
-    if (titleLower.includes("друк") || titleLower.includes("print"))
-      return <Printer size={18} />;
-    if (titleLower.includes("фото") || titleLower.includes("photography"))
-      return <Camera size={18} />;
-    if (titleLower.includes("візитк") || titleLower.includes("card"))
-      return <CreditCard size={18} />;
-    if (titleLower.includes("банер") || titleLower.includes("banner"))
-      return <RectangleHorizontal size={18} />;
-    if (titleLower.includes("табличк") || titleLower.includes("sign"))
-      return <FolderOpen size={18} />;
-    if (titleLower.includes("наліпк") || titleLower.includes("sticker"))
-      return <Sticker size={18} />;
-    if (titleLower.includes("сувенір") || titleLower.includes("souvenir"))
-      return <Gift size={18} />;
-    if (titleLower.includes("дизайн") || titleLower.includes("design"))
-      return <Brush size={18} />;
-    if (titleLower.includes("брошур") || titleLower.includes("laminat"))
-      return <FileText size={18} />;
-    if (titleLower.includes("плакетк") || titleLower.includes("plaque"))
-      return <BadgeCheck size={18} />;
-
-    return <Star size={18} />;
+  // Іконка категорії береться ЛИШЕ з БД (cat.icon).
+  // Якщо для послуги іконку ще не задали в адмінці - показуємо
+  // одну й ту саму нейтральну заглушку (без вгадування за назвою).
+  const renderServiceIcon = (cat, size = 18) => {
+    if (cat?.icon) {
+      return (
+        <img
+          src={cat.icon}
+          alt={cat.title}
+          className="object-contain"
+          style={{ width: size, height: size }}
+          onError={(e) => {
+            // якщо картинка не завантажилась - ховаємо її,
+            // щоб не було "зламаного" зображення
+            e.target.style.display = "none";
+          }}
+        />
+      );
+    }
+    return <Star size={size} />;
   };
 
   // FETCH SERVICES
@@ -207,7 +189,7 @@ const Services = () => {
             Наші <span className="text-[#FFC400]">послуги</span>
           </h2>
 
-          <p className="text-gray-500 mt-2 font-[Inter] max-w-2xl mx-auto">
+          <p className="text-gray-500 mt-2 font-[Inter] font-medium max-w-2xl mx-auto">
             Повний каталог послуг копіцентру. Оберіть необхідну категорію для
             детального ознайомлення
           </p>
@@ -236,10 +218,10 @@ const Services = () => {
                           : "bg-gray-100 text-gray-500 group-hover:bg-[#FFC400]/10 group-hover:text-[#FFC400]"
                       }`}
                     >
-                      {getServiceIcon(cat.title)}
+                      {renderServiceIcon(cat, 18)}
                     </div>
                     <span
-                      className={`text-sm font-medium ${active === i ? "font-semibold" : ""}`}
+                      className={`text-sm font-semibold ${active === i ? "font-bold" : ""}`}
                     >
                       {cat.title}
                     </span>
@@ -264,14 +246,14 @@ const Services = () => {
             <div className="bg-gradient-to-r from-[#FFC400] to-[#FFD700] px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-[#1F2933]">
-                  {data[active] && getServiceIcon(data[active].title)}
+                  {data[active] && renderServiceIcon(data[active], 22)}
                 </div>
                 <div>
                   <h3 className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#1F2933]">
                     {data[active]?.title}
                   </h3>
                   {data[active]?.items?.length > 0 && (
-                    <p className="text-[#1F2933]/70 text-sm mt-1">
+                    <p className="text-[#1F2933]/70 text-sm font-medium mt-1">
                       Всього позицій: {data[active].items.length}
                     </p>
                   )}
@@ -290,7 +272,7 @@ const Services = () => {
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-[#FFC400] opacity-0 group-hover:opacity-100 transition" />
-                        <span className="font-[Inter] text-gray-700 group-hover:text-[#1F2933] transition">
+                        <span className="font-[Inter] font-semibold text-gray-700 group-hover:text-[#1F2933] transition">
                           {item.name}
                         </span>
                       </div>
