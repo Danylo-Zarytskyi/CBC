@@ -4,6 +4,7 @@ import { LogOut, Power, Shield } from "lucide-react";
 
 import Header from "../components/Header";
 import AdminHero from "./AdminHero";
+import AdminHeroStatic from "./AdminHeroStatic";
 import Footer from "../components/Footer";
 import AdminPopularServices from "./AdminPopularServices";
 import AdminServices from "./AdminServices";
@@ -79,6 +80,7 @@ const AdminDashboard = () => {
         <Header />
 
         <main className="border border-yellow-400/20 rounded-xl p-3 mt-6 bg-black/20">
+          <AdminHeroStatic />
           <AdminHero />
           <AdminOrders />
           <AdminPopularServices />

@@ -12,6 +12,7 @@ import adminRoutes from "./routes/adminRoute.js";
 import serviceRoutes from "./routes/serviceRoute.js";
 import popularServicesRoute from "./routes/popularServicesRoute.js";
 import workRoute from "./routes/workRoute.js";
+import heroRoute from "./routes/heroRoute.js";
 
 dotenv.config();
 dbRunner();
@@ -63,6 +64,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/popular-services", popularServicesRoute);
 app.use("/api/works", workRoute);
+app.use("/api/hero", heroRoute);
 
 // 404
 app.use("*", (req, res) => {

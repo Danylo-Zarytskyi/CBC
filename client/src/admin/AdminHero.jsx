@@ -1,84 +1,205 @@
-import { LayoutDashboard, ShieldCheck, FolderKanban } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import api from "../api/api";
+import { Save, RefreshCw, FileText, TrendingUp } from "lucide-react";
 
 const AdminHero = () => {
-  return (
-    <section className="relative overflow-hidden bg-[#07111C] border-b border-white/10">
-      {/* BG GLOW */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-150px] left-[-120px] w-[400px] h-[400px] bg-yellow-400/10 blur-3xl rounded-full" />
+  const [form, setForm] = useState({
+    description: "",
+    highlightedText: "",
+    statYears: "",
+    statYearsLabel: "",
+    statOrders: "",
+    statOrdersLabel: "",
+    statSupport: "",
+    statSupportLabel: "",
+  });
 
-        <div className="absolute bottom-[-180px] right-[-150px] w-[500px] h-[500px] bg-yellow-400/5 blur-3xl rounded-full" />
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const fetched = useRef(false);
+
+  const fetchHero = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/api/hero");
+      setForm(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (fetched.current) return;
+    fetched.current = true;
+    fetchHero();
+  }, []);
+
+  const change = (e) => {
+    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setSaved(false);
+  };
+
+  const submit = async () => {
+    setSubmitting(true);
+    try {
+      const res = await api.put("/api/hero", form);
+      setForm(res.data);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      console.log(err);
+      alert("Помилка при збереженні");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#07111C] text-white flex flex-col items-center justify-center">
+        <RefreshCw size={32} className="text-yellow-400 animate-spin mb-3" />
+        <p className="text-gray-400">Завантаження...</p>
       </div>
+    );
+  }
 
-      {/* CONTENT */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-34">
-        {/* TOP */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
-            <ShieldCheck size={16} />
-            Admin Panel
-          </div>
-        </div>
-
-        {/* TITLE */}
-        <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight">
-            CBC
-            <span className="text-[#FFC400]"> CMS</span>
+  return (
+    <div className="min-h-screen bg-[#07111C] text-white p-6">
+      <div className="max-w-3xl mx-auto">
+        {/* HEADER */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">
+            Головний блок (Hero)
           </h1>
-
-          <p className="mt-5 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-            Панель керування сайтом для редагування послуг, популярних
-            пропозицій, портфоліо та заявок клієнтів.
+          <p className="text-gray-400 text-sm mt-1">
+            Опис та статистика на головній сторінці сайту
           </p>
         </div>
 
-        {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-14">
-          {/* CARD */}
-          <div className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-yellow-400/10 flex items-center justify-center mb-4">
-              <LayoutDashboard className="text-[#FFC400]" />
-            </div>
+        <div className="bg-gradient-to-br from-white/10 to-white/5 border border-yellow-400/30 rounded-2xl p-6 shadow-xl space-y-6">
+          {/* DESCRIPTION */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
+              <FileText size={14} />
+              Опис
+            </label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={change}
+              rows={3}
+              placeholder="Друк, поліграфія, дизайн..."
+              className="w-full p-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400/50 transition resize-none"
+            />
+          </div>
 
-            <h3 className="text-white font-semibold text-lg">Управління</h3>
-
-            <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-              Швидке редагування контенту сайту без необхідності змінювати код
-              вручну.
+          {/* HIGHLIGHTED TEXT */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-gray-300 mb-2">
+              <FileText size={14} />
+              Виділений фрагмент опису (жовтим)
+            </label>
+            <input
+              name="highlightedText"
+              value={form.highlightedText}
+              onChange={change}
+              placeholder="продаж канцелярії"
+              className="w-full p-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400/50 transition"
+            />
+            <p className="text-gray-500 text-xs mt-1">
+              Цей текст має точно збігатися з частиною опису вище — він буде
+              підсвічений жовтим кольором.
             </p>
           </div>
 
-          {/* CARD */}
-          <div className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-yellow-400/10 flex items-center justify-center mb-4">
-              <FolderKanban className="text-[#FFC400]" />
+          {/* STATS */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-gray-300 mb-3">
+              <TrendingUp size={14} />
+              Статистика (3 показники)
+            </label>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Years */}
+              <div className="space-y-2">
+                <input
+                  name="statYears"
+                  value={form.statYears}
+                  onChange={change}
+                  placeholder="10+"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+                <input
+                  name="statYearsLabel"
+                  value={form.statYearsLabel}
+                  onChange={change}
+                  placeholder="років досвіду"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+              </div>
+
+              {/* Orders */}
+              <div className="space-y-2">
+                <input
+                  name="statOrders"
+                  value={form.statOrders}
+                  onChange={change}
+                  placeholder="5000+"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+                <input
+                  name="statOrdersLabel"
+                  value={form.statOrdersLabel}
+                  onChange={change}
+                  placeholder="виконаних замовлень"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+              </div>
+
+              {/* Support */}
+              <div className="space-y-2">
+                <input
+                  name="statSupport"
+                  value={form.statSupport}
+                  onChange={change}
+                  placeholder="24/7"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+                <input
+                  name="statSupportLabel"
+                  value={form.statSupportLabel}
+                  onChange={change}
+                  placeholder="онлайн підтримка"
+                  className="w-full p-2 bg-black/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-yellow-400/50"
+                />
+              </div>
             </div>
-
-            <h3 className="text-white font-semibold text-lg">Контент</h3>
-
-            <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-              Додавання нових робіт, послуг, фото, описів та оновлення
-              інформації в реальному часі.
-            </p>
           </div>
 
-          {/* CARD */}
-          <div className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-yellow-400/10 flex items-center justify-center mb-4">
-              <ShieldCheck className="text-[#FFC400]" />
-            </div>
-
-            <h3 className="text-white font-semibold text-lg">Замовлення</h3>
-
-            <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-              Контроль заявок клієнтів, статусів замовлень та історії виконаних
-              робіт.
-            </p>
-          </div>
+          {/* SAVE BUTTON */}
+          <button
+            onClick={submit}
+            disabled={submitting}
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-xl transition-all duration-200 disabled:opacity-50"
+          >
+            {submitting ? (
+              <RefreshCw size={18} className="animate-spin" />
+            ) : (
+              <Save size={18} />
+            )}
+            {submitting
+              ? "Збереження..."
+              : saved
+                ? "Збережено ✓"
+                : "Зберегти зміни"}
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

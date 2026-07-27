@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Sparkles, ArrowRight } from "lucide-react";
+import api from "../api/api";
 
 const Hero = () => {
   const slides = [
@@ -31,6 +32,54 @@ const Hero = () => {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // HERO CONTENT (з БД, з дефолтними значеннями поки вантажиться)
+  const [hero, setHero] = useState({
+    description:
+      "Друк, поліграфія, дизайн, продаж канцелярії, рекламна продукція та доставка по Україні",
+    highlightedText: "продаж канцелярії",
+    statYears: "10+",
+    statYearsLabel: "років досвіду",
+    statOrders: "5000+",
+    statOrdersLabel: "виконаних замовлень",
+    statSupport: "24/7",
+    statSupportLabel: "онлайн підтримка",
+  });
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        const res = await api.get("/api/hero");
+        if (res.data) setHero((p) => ({ ...p, ...res.data }));
+      } catch (err) {
+        console.log(err);
+        // залишаємо дефолтні значення, якщо запит не вдався
+      }
+    };
+
+    fetchHero();
+  }, []);
+
+  // Розбиваємо опис на частини, щоб підсвітити потрібний фрагмент жовтим
+  const renderDescription = () => {
+    const { description, highlightedText } = hero;
+
+    if (!highlightedText || !description.includes(highlightedText)) {
+      return description;
+    }
+
+    const idx = description.indexOf(highlightedText);
+    const before = description.slice(0, idx);
+    const after = description.slice(idx + highlightedText.length);
+
+    return (
+      <>
+        {before}
+        <span className="text-[#FFC400] font-semibold">{highlightedText}</span>
+        {after}
+      </>
+    );
+  };
 
   // TYPING
   const title = "Комп'ютерно-Діловий Центр";
@@ -166,12 +215,7 @@ const Hero = () => {
 
           {/* DESCRIPTION */}
           <p className="mt-8 text-lg md:text-2xl text-white/75 leading-relaxed max-w-2xl">
-            Друк, поліграфія, дизайн,
-            <span className="text-[#FFC400] font-semibold">
-              {" "}
-              продаж канцелярії
-            </span>
-            , рекламна продукція та доставка по Україні
+            {renderDescription()}
           </p>
 
           {/* BUTTONS */}
@@ -200,18 +244,24 @@ const Hero = () => {
           {/* STATS */}
           <div className="mt-14 flex flex-wrap gap-8">
             <div>
-              <h3 className="text-3xl font-black text-[#FFC400]">10+</h3>
-              <p className="text-white/60 mt-1">років досвіду</p>
+              <h3 className="text-3xl font-black text-[#FFC400]">
+                {hero.statYears}
+              </h3>
+              <p className="text-white/60 mt-1">{hero.statYearsLabel}</p>
             </div>
 
             <div>
-              <h3 className="text-3xl font-black text-[#FFC400]">5000+</h3>
-              <p className="text-white/60 mt-1">виконаних замовлень</p>
+              <h3 className="text-3xl font-black text-[#FFC400]">
+                {hero.statOrders}
+              </h3>
+              <p className="text-white/60 mt-1">{hero.statOrdersLabel}</p>
             </div>
 
             <div>
-              <h3 className="text-3xl font-black text-[#FFC400]">24/7</h3>
-              <p className="text-white/60 mt-1">онлайн підтримка</p>
+              <h3 className="text-3xl font-black text-[#FFC400]">
+                {hero.statSupport}
+              </h3>
+              <p className="text-white/60 mt-1">{hero.statSupportLabel}</p>
             </div>
           </div>
         </div>
