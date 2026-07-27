@@ -29,7 +29,7 @@ const Services = () => {
 
   const sectionRef = useRef(null);
 
-  // Мапа іконок для різних типів послуг
+  // Мапа іконок для різних типів послуг (fallback, якщо в БД не задано icon)
   const getServiceIcon = (title) => {
     const titleLower = title.toLowerCase();
 
@@ -55,6 +55,28 @@ const Services = () => {
       return <BadgeCheck size={18} />;
 
     return <Star size={18} />;
+  };
+
+  // Універсальний рендер іконки категорії:
+  // якщо в БД задано URL іконки (cat.icon) - показуємо картинку,
+  // інакше - fallback на lucide-іконку за назвою.
+  const renderServiceIcon = (cat, size = 18) => {
+    if (cat?.icon) {
+      return (
+        <img
+          src={cat.icon}
+          alt={cat.title}
+          className="object-contain"
+          style={{ width: size, height: size }}
+          onError={(e) => {
+            // якщо картинка не завантажилась - ховаємо її,
+            // щоб не було "зламаного" зображення
+            e.target.style.display = "none";
+          }}
+        />
+      );
+    }
+    return getServiceIcon(cat?.title || "");
   };
 
   // FETCH SERVICES
@@ -236,7 +258,7 @@ const Services = () => {
                           : "bg-gray-100 text-gray-500 group-hover:bg-[#FFC400]/10 group-hover:text-[#FFC400]"
                       }`}
                     >
-                      {getServiceIcon(cat.title)}
+                      {renderServiceIcon(cat, 18)}
                     </div>
                     <span
                       className={`text-sm font-medium ${active === i ? "font-semibold" : ""}`}
@@ -264,7 +286,7 @@ const Services = () => {
             <div className="bg-gradient-to-r from-[#FFC400] to-[#FFD700] px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-[#1F2933]">
-                  {data[active] && getServiceIcon(data[active].title)}
+                  {data[active] && renderServiceIcon(data[active], 22)}
                 </div>
                 <div>
                   <h3 className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#1F2933]">
