@@ -179,6 +179,10 @@ const ContactForm = () => {
         }`}
         id="orderForm"
       >
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+        `}</style>
+
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <div
             data-reveal="form-container"
@@ -190,11 +194,11 @@ const ContactForm = () => {
           >
             {/* HEADER */}
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-white">
+              <h2 className="text-3xl md:text-4xl font-bold font-['Unbounded'] text-white">
                 Залишити <span className="text-[#FFC400]">заявку</span>
               </h2>
 
-              <p className="text-gray-300 mt-2 font-[Inter]">
+              <p className="text-gray-300 mt-2 font-['Manrope']">
                 Ми швидко прорахуємо вартість і зв’яжемось з вами
               </p>
             </div>
@@ -204,7 +208,7 @@ const ContactForm = () => {
               {/* NAME + PHONE */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-white mb-2 font-[Inter]">
+                  <label className="block text-white mb-2 font-['Manrope']">
                     Ім’я
                   </label>
 
@@ -213,16 +217,18 @@ const ContactForm = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Ваше ім'я"
-                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
+                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400] font-['Manrope']"
                   />
 
                   {errors.name && (
-                    <p className="text-red-400 text-xs mt-1">{errors.name}</p>
+                    <p className="text-red-400 text-xs mt-1 font-['Manrope']">
+                      {errors.name}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-white mb-2 font-[Inter]">
+                  <label className="block text-white mb-2 font-['Manrope']">
                     Телефон
                   </label>
 
@@ -231,18 +237,20 @@ const ContactForm = () => {
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="Номер телефону"
-                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
+                    className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400] font-['Manrope']"
                   />
 
                   {errors.phone && (
-                    <p className="text-red-400 text-xs mt-1">{errors.phone}</p>
+                    <p className="text-red-400 text-xs mt-1 font-['Manrope']">
+                      {errors.phone}
+                    </p>
                   )}
                 </div>
               </div>
 
               {/* FILES */}
               <div>
-                <label className="block text-white mb-2 font-[Inter]">
+                <label className="block text-white mb-2 font-['Manrope']">
                   Файли / фото (до 5MB на файл)
                 </label>
 
@@ -250,19 +258,21 @@ const ContactForm = () => {
                   type="file"
                   multiple
                   onChange={handleFiles}
-                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white cursor-pointer"
+                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white cursor-pointer font-['Manrope']"
                 />
 
                 {/* ПОВІДОМЛЕННЯ ПРО ОБОВ'ЯЗКОВІСТЬ ФАЙЛУ ПРИБРАНО */}
 
                 {fileError && (
-                  <p className="text-red-400 text-xs mt-1">{fileError}</p>
+                  <p className="text-red-400 text-xs mt-1 font-['Manrope']">
+                    {fileError}
+                  </p>
                 )}
 
                 {/* Список вибраних файлів */}
                 {files.length > 0 && (
                   <div className="mt-3 space-y-2">
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-300 text-sm font-['Manrope']">
                       Вибрано файлів: {files.length}
                     </p>
                     <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -271,7 +281,7 @@ const ContactForm = () => {
                           key={index}
                           className="flex items-center justify-between bg-black/50 p-2 rounded-lg"
                         >
-                          <span className="text-white text-xs truncate flex-1">
+                          <span className="text-white text-xs truncate flex-1 font-['Manrope']">
                             {file.name} ({(file.size / 1024 / 1024).toFixed(2)}{" "}
                             MB)
                           </span>
@@ -291,7 +301,7 @@ const ContactForm = () => {
 
               {/* SERVICE */}
               <div>
-                <label className="block text-white mb-2 font-[Inter]">
+                <label className="block text-white mb-2 font-['Manrope']">
                   Послуга
                 </label>
 
@@ -299,7 +309,7 @@ const ContactForm = () => {
                   name="service"
                   value={form.service}
                   onChange={handleChange}
-                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
+                  className="w-full p-3 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400] font-['Manrope']"
                 >
                   {services.map((s, i) => (
                     <option key={i} value={s}>
@@ -311,7 +321,7 @@ const ContactForm = () => {
 
               {/* COMMENT */}
               <div className="relative">
-                <label className="block text-white mb-2 font-[Inter]">
+                <label className="block text-white mb-2 font-['Manrope']">
                   Опис замовлення
                 </label>
 
@@ -321,7 +331,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   rows={5}
                   placeholder="Опишіть замовлення"
-                  className="w-full p-3 pr-12 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400]"
+                  className="w-full p-3 pr-12 rounded-xl bg-[#0F0B00] border border-[#FFC400]/30 text-white outline-none focus:border-[#FFC400] font-['Manrope']"
                 />
 
                 <button
@@ -333,7 +343,9 @@ const ContactForm = () => {
                 </button>
 
                 {errors.comment && (
-                  <p className="text-red-400 text-xs mt-1">{errors.comment}</p>
+                  <p className="text-red-400 text-xs mt-1 font-['Manrope']">
+                    {errors.comment}
+                  </p>
                 )}
               </div>
 
@@ -341,7 +353,7 @@ const ContactForm = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-[#FFC400] text-[#1F2933] py-3 rounded-xl font-bold hover:opacity-90 transition cursor-pointer disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 bg-[#FFC400] text-[#1F2933] py-3 rounded-xl font-['Manrope'] font-bold hover:opacity-90 transition cursor-pointer disabled:opacity-50"
               >
                 <Send size={18} />
 
@@ -362,11 +374,11 @@ const ContactForm = () => {
             className="bg-[#0F0B00] border border-[#FFC400]/30 rounded-2xl p-6 max-w-md w-full text-white"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-[#FFC400] font-bold mb-3">
+            <h3 className="text-[#FFC400] font-bold mb-3 font-['Unbounded']">
               Що писати в описі?
             </h3>
 
-            <ul className="text-sm text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-300 space-y-2 font-['Manrope']">
               <li>• Що саме потрібно зробити</li>
               <li>• Розмір / кількість</li>
               <li>• Колір / стиль</li>
@@ -375,7 +387,7 @@ const ContactForm = () => {
 
             <button
               onClick={() => setShowInfo(false)}
-              className="mt-5 w-full bg-[#FFC400] text-black py-2 rounded-xl font-semibold hover:opacity-90 transition cursor-pointer"
+              className="mt-5 w-full bg-[#FFC400] text-black py-2 rounded-xl font-['Manrope'] font-semibold hover:opacity-90 transition cursor-pointer"
             >
               Зрозуміло
             </button>

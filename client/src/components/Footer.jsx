@@ -13,7 +13,7 @@ const Footer = () => {
   return (
     <footer
       data-reveal="footer"
-      className={`bg-[#07111C] border-t border-[#FFC400]/20 py-12 transition-all duration-700 ${
+      className={`bg-[#07111C] border-t border-[#FFC400]/20 py-12 antialiased transition-all duration-700 ${
         isRevealed("footer")
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-10"
@@ -30,11 +30,11 @@ const Footer = () => {
                 : "opacity-0 translate-y-6"
             }`}
           >
-            <h4 className="text-[#FFC400] font-bold mb-4 font-[Montserrat]">
+            <h4 className="text-[#FFC400] font-bold mb-4 font-[Montserrat] tracking-wide">
               Комп'ютерно-Діловий Центр
             </h4>
 
-            <p className="text-gray-400 text-sm font-[Inter] leading-relaxed">
+            <p className="text-gray-400 text-sm font-[Inter] leading-relaxed tracking-wide">
               Друк, дизайн, реклама та сувеніри у Стрию з доставкою по Україні
             </p>
           </div>
@@ -49,11 +49,11 @@ const Footer = () => {
             }`}
             style={{ transitionDelay: "100ms" }}
           >
-            <h4 className="text-white font-bold mb-4 font-[Montserrat]">
+            <h4 className="text-white font-bold mb-4 font-[Montserrat] tracking-wide">
               Послуги
             </h4>
 
-            <ul className="space-y-2 text-sm text-gray-400 font-[Inter]">
+            <ul className="space-y-2.5 text-sm text-gray-400 font-[Inter] leading-relaxed tracking-wide">
               <li
                 onClick={() => handleScroll("services")}
                 className="hover:text-[#FFC400] transition cursor-pointer"
@@ -101,18 +101,11 @@ const Footer = () => {
             }`}
             style={{ transitionDelay: "200ms" }}
           >
-            <h4 className="text-white font-bold mb-4 font-[Montserrat]">
+            <h4 className="text-white font-bold mb-4 font-[Montserrat] tracking-wide">
               Інформація
             </h4>
 
-            <ul className="space-y-2 text-sm text-gray-400 font-[Inter]">
-              <li
-                onClick={() => handleScroll("order")}
-                className="hover:text-[#FFC400] transition cursor-pointer"
-              >
-                Доставка по Україні
-              </li>
-
+            <ul className="space-y-2.5 text-sm text-gray-400 font-[Inter] leading-relaxed tracking-wide">
               <li
                 onClick={() => handleScroll("about")}
                 className="hover:text-[#FFC400] transition cursor-pointer"
@@ -134,12 +127,12 @@ const Footer = () => {
           >
             <h4
               onClick={() => handleScroll("contacts")}
-              className="text-white font-bold mb-4 font-[Montserrat] hover:text-[#FFC400] transition cursor-pointer"
+              className="text-white font-bold mb-4 font-[Montserrat] tracking-wide hover:text-[#FFC400] transition cursor-pointer"
             >
               Контакти
             </h4>
 
-            <ul className="space-y-2 text-sm text-gray-400 font-[Inter]">
+            <ul className="space-y-2.5 text-sm text-gray-400 font-[Inter] leading-relaxed tracking-wide">
               <li className="hover:text-[#FFC400] transition">
                 <a href="tel:+380994249545">📞 099 424 95 45</a>
               </li>
@@ -167,11 +160,16 @@ const Footer = () => {
           }`}
           style={{ transitionDelay: "400ms" }}
         >
-          <p className="text-gray-500 text-sm font-[Inter]">
+          <p className="text-gray-500 text-sm font-[Inter] tracking-wide">
             © 2024 Комп'ютерно-Діловий Центр — Друк, дизайн, реклама у Стрию
           </p>
         </div>
       </div>
+
+      {/* FONTS */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap');
+      `}</style>
     </footer>
   );
 };

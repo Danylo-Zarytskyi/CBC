@@ -1,15 +1,14 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import api from "../api/api"; // ВИКОРИСТОВУЄМО налаштований api ЗАМІСТЬ прямого axios
+import api from "../api/api";
 
 const Works = () => {
   const [works, setWorks] = useState([]);
-  const [loading, setLoading] = useState(true); // Додаємо стан завантаження
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        // ВИКОРИСТОВУЄМО api ЗАМІСТЬ axios з хардкодним URL
         const res = await api.get("/api/works");
         setWorks(res.data);
       } catch (err) {
@@ -22,38 +21,46 @@ const Works = () => {
     fetchWorks();
   }, []);
 
-  // Показуємо індикатор завантаження поки йде запит
   if (loading) {
     return (
       <section className="bg-white py-24 text-center">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+        `}</style>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex flex-col items-center justify-center">
             <div className="w-12 h-12 border-4 border-[#FFC400] border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-500 mt-4">Завантаження робіт...</p>
+            <p className="text-gray-500 mt-4 font-['Manrope']">
+              Завантаження робіт...
+            </p>
           </div>
         </div>
       </section>
     );
   }
 
-  // Якщо немає робіт, показуємо повідомлення
   if (!works.length) {
     return (
       <section
         className="bg-white py-24 text-center scroll-mt-24"
         id="portfolio"
       >
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+        `}</style>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="text-center mb-14">
             <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2933] font-[Montserrat]">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2933] font-['Unbounded']">
               Наші <span className="text-[#FFC400]">роботи</span>
             </h2>
-            <p className="text-gray-500 mt-2 font-[Inter]">
+            <p className="text-gray-500 mt-2 font-['Manrope']">
               Приклади виконаних замовлень
             </p>
           </div>
-          <p className="text-gray-500">Немає робіт у портфоліо</p>
+          <p className="text-gray-500 font-['Manrope']">
+            Немає робіт у портфоліо
+          </p>
         </div>
       </section>
     );
@@ -61,21 +68,23 @@ const Works = () => {
 
   return (
     <section className="bg-white py-24 scroll-mt-24" id="portfolio">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+      `}</style>
+
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        {/* HEADER */}
         <div className="text-center mb-14">
           <div className="w-16 h-[2px] bg-[#FFC400] mx-auto mb-4"></div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1F2933] font-[Montserrat]">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1F2933] font-['Unbounded']">
             Наші <span className="text-[#FFC400]">роботи</span>
           </h2>
 
-          <p className="text-gray-500 mt-2 font-[Inter]">
+          <p className="text-gray-500 mt-2 font-['Manrope']">
             Приклади виконаних замовлень
           </p>
         </div>
 
-        {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {works.map((w, i) => (
             <motion.div
@@ -102,9 +111,13 @@ const Works = () => {
               </div>
 
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-                <h3 className="text-white text-lg font-bold">{w.title}</h3>
+                <h3 className="text-white text-lg font-bold font-['Unbounded']">
+                  {w.title}
+                </h3>
                 {w.desc && (
-                  <p className="text-gray-200 text-sm mt-1">{w.desc}</p>
+                  <p className="text-gray-200 text-sm mt-1 font-['Manrope']">
+                    {w.desc}
+                  </p>
                 )}
               </div>
             </motion.div>

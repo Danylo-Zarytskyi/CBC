@@ -62,6 +62,10 @@ const Header = () => {
 
   return (
     <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+      `}</style>
+
       <header
         data-reveal="header"
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
@@ -93,7 +97,7 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => handleScroll(item.id)}
-                className="relative px-4 py-2 rounded-lg text-white/70 hover:text-[#FFC400] hover:bg-white/5 transition-all duration-300 font-medium group"
+                className="relative px-4 py-2 rounded-lg text-white/70 hover:text-[#FFC400] hover:bg-white/5 transition-all duration-300 font-['Manrope'] font-medium group"
               >
                 {item.label}
                 <span className="absolute bottom-1 left-1/2 w-0 h-[2px] bg-[#FFC400] transition-all duration-300 group-hover:w-6 group-hover:-translate-x-1/2" />
@@ -106,7 +110,7 @@ const Header = () => {
             {/* ORDER BUTTON */}
             <button
               onClick={() => handleScroll("orderForm")}
-              className="hidden sm:block bg-gradient-to-r from-[#FFC400] to-[#FFD84D] text-black px-5 py-2 rounded-xl font-semibold hover:shadow-lg hover:scale-105 active:scale-95 transition-all"
+              className="hidden sm:block bg-gradient-to-r from-[#FFC400] to-[#FFD84D] text-black px-5 py-2 rounded-xl font-['Manrope'] font-semibold hover:shadow-lg hover:scale-105 active:scale-95 transition-all"
             >
               Замовити
             </button>
@@ -115,7 +119,7 @@ const Header = () => {
             <div className="hidden lg:flex flex-col items-end">
               <a
                 href="tel:+380994249545"
-                className="text-white font-medium text-sm hover:text-[#FFC400] transition flex items-center gap-1"
+                className="text-white font-['JetBrains_Mono'] font-medium text-sm hover:text-[#FFC400] transition flex items-center gap-1"
               >
                 <Phone size={14} />
                 +38 (099) 424-95-45
@@ -243,7 +247,7 @@ const Header = () => {
                 <button
                   key={item.id}
                   onClick={() => handleScroll(item.id)}
-                  className="block w-full text-left py-4 px-4 text-white/80 hover:text-[#FFC400] hover:bg-white/10 rounded-xl transition-all duration-200 font-medium"
+                  className="block w-full text-left py-4 px-4 text-white/80 hover:text-[#FFC400] hover:bg-white/10 rounded-xl transition-all duration-200 font-['Manrope'] font-medium"
                 >
                   {item.label}
                 </button>
@@ -254,7 +258,7 @@ const Header = () => {
             <div className="p-6 pt-4 border-t border-white/10 bg-[#07111C]/30">
               <a
                 href="tel:+380994249545"
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#FFC400] to-[#FFD84D] text-black py-3.5 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#FFC400] to-[#FFD84D] text-black py-3.5 rounded-xl font-['Manrope'] font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200"
               >
                 <Phone size={18} />
                 Зателефонувати

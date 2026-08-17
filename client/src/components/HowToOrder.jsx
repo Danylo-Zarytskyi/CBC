@@ -54,6 +54,10 @@ const HowToOrder = () => {
       }`}
       id="howToOrder"
     >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+      `}</style>
+
       <div className="absolute inset-0 z-0 pointer-events-none">
         <svg
           className="absolute -left-40 top-10 w-[600px] opacity-20 animate-[float_12s_ease-in-out_infinite]"
@@ -93,11 +97,11 @@ const HowToOrder = () => {
         >
           <div className="w-16 h-0.5 bg-[#FFC400] mx-auto mb-4"></div>
 
-          <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-white">
+          <h2 className="text-3xl md:text-4xl font-bold font-['Unbounded'] text-white">
             Як зробити <span className="text-[#FFC400]">замовлення</span>
           </h2>
 
-          <p className="text-gray-400 mt-2 font-[Inter]">
+          <p className="text-gray-400 mt-2 font-['Manrope']">
             5 простих кроків до результату
           </p>
         </div>
@@ -138,7 +142,7 @@ const HowToOrder = () => {
               </div>
 
               <span
-                className={`mt-3 text-xs text-center max-w-[90px] font-[Inter]
+                className={`mt-3 text-xs text-center max-w-[90px] font-['Manrope']
                 ${active === i ? "text-white font-semibold" : "text-gray-500"}`}
               >
                 {step.title}
@@ -153,11 +157,11 @@ const HowToOrder = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-xl p-8 text-center"
         >
-          <h3 className="text-2xl font-bold text-[#FFC400] mb-3 font-[Montserrat]">
+          <h3 className="text-2xl font-bold text-[#FFC400] mb-3 font-['Unbounded']">
             {steps[active].title}
           </h3>
 
-          <p className="text-gray-600 font-[Inter] text-lg">
+          <p className="text-gray-600 font-['Manrope'] text-lg">
             {steps[active].desc}
           </p>
         </motion.div>

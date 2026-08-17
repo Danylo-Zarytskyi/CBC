@@ -12,7 +12,6 @@ import {
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
-/* 🔥 FIX: компонент винесений з render (ЦЕ ЄДИНА ЗМІНА) */
 const Card = ({
   title,
   value,
@@ -47,11 +46,13 @@ const Card = ({
         {icon}
       </div>
 
-      <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-      <p className="text-white/80">{value}</p>
-      <p className="text-white/40 text-sm mt-1">{sub}</p>
+      <h3 className="text-xl font-bold text-white mb-2 font-['Unbounded']">
+        {title}
+      </h3>
+      <p className="text-white/80 font-['Manrope']">{value}</p>
+      <p className="text-white/40 text-sm mt-1 font-['Manrope']">{sub}</p>
 
-      <div className="flex items-center gap-2 mt-5 text-[#FFC400] text-sm">
+      <div className="flex items-center gap-2 mt-5 text-[#FFC400] text-sm font-['Manrope']">
         Відкрити <ExternalLink size={14} />
       </div>
 
@@ -102,12 +103,16 @@ const ContactInfo = () => {
       id="contacts"
       className="relative py-20 bg-[#07111C] text-white overflow-hidden"
     >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+      `}</style>
+
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-5xl font-bold">
+          <h2 className="text-3xl md:text-5xl font-bold font-['Unbounded']">
             Наші <span className="text-[#FFC400]">контакти</span>
           </h2>
-          <p className="text-white/60 mt-4">
+          <p className="text-white/60 mt-4 font-['Manrope']">
             Зв'яжіться з нами будь-яким способом
           </p>
         </div>

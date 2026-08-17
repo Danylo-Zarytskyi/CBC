@@ -22,6 +22,8 @@ import {
   User,
   Package,
   MessageSquare,
+  ArrowDownWideNarrow,
+  ArrowUpWideNarrow,
 } from "lucide-react";
 
 const statuses = [
@@ -96,6 +98,7 @@ const AdminOrders = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -134,15 +137,25 @@ const AdminOrders = () => {
     return statuses.find((s) => s.value === status) || statuses[0];
   };
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesList = activeList === "all" || order.status === activeList;
-    const matchesSearch =
-      searchQuery === "" ||
-      order.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.phone?.includes(searchQuery) ||
-      order.service?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesList && matchesSearch;
-  });
+  const toggleSortOrder = () => {
+    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+  };
+
+  const filteredOrders = orders
+    .filter((order) => {
+      const matchesList = activeList === "all" || order.status === activeList;
+      const matchesSearch =
+        searchQuery === "" ||
+        order.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.phone?.includes(searchQuery) ||
+        order.service?.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesList && matchesSearch;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0).getTime();
+      const dateB = new Date(b.createdAt || 0).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
 
   const getListCount = (id) => {
     if (id === "all") return orders.length;
@@ -243,6 +256,19 @@ const AdminOrders = () => {
                 )}
               </div>
               <button
+                onClick={toggleSortOrder}
+                title={
+                  sortOrder === "newest" ? "Спочатку нові" : "Спочатку старі"
+                }
+                className="p-2 bg-black/50 border border-white/10 rounded-lg text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50 transition"
+              >
+                {sortOrder === "newest" ? (
+                  <ArrowDownWideNarrow size={16} />
+                ) : (
+                  <ArrowUpWideNarrow size={16} />
+                )}
+              </button>
+              <button
                 onClick={handleRefresh}
                 disabled={refreshing}
                 className="p-2 bg-black/50 border border-white/10 rounded-lg text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50 transition disabled:opacity-50"
@@ -252,6 +278,12 @@ const AdminOrders = () => {
                   className={refreshing ? "animate-spin" : ""}
                 />
               </button>
+            </div>
+            <div className="mt-2 text-[10px] text-gray-500 flex items-center gap-1">
+              Сортування:
+              <span className="text-yellow-400 font-medium">
+                {sortOrder === "newest" ? "спочатку нові" : "спочатку старі"}
+              </span>
             </div>
           </div>
 
