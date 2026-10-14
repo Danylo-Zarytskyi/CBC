@@ -39,7 +39,7 @@ if (!fs.existsSync(uploadDir)) {
 // CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://cbc-oman.onrender.com"],
+    origin: ["https://www.cbcstryi.top", "https://cbcstryi.top"],
     credentials: true,
   }),
 );
