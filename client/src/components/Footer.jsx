@@ -161,7 +161,7 @@ const Footer = () => {
           style={{ transitionDelay: "400ms" }}
         >
           <p className="text-gray-500 text-sm font-[Inter] tracking-wide">
-            © 2024 Комп'ютерно-Діловий Центр — Друк, дизайн, реклама у Стрию
+            © 2026 Комп'ютерно-Діловий Центр — Друк, дизайн, реклама у Стрию
           </p>
         </div>
       </div>
