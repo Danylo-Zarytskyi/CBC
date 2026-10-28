@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import dbRunner from "./bin/runners/db.js";
+import { OAuth2Client } from "google-auth-library";
 
 import orderRoutes from "./routes/orderRoute.js";
 import adminRoutes from "./routes/adminRoute.js";
@@ -15,6 +16,11 @@ import workRoute from "./routes/workRoute.js";
 import heroRoute from "./routes/heroRoute.js";
 
 dotenv.config();
+const oauthClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  "https://cbc-back.onrender.com/auth/google/callback",
+);
 dbRunner();
 // Тимчасова діагностика
 console.log(
