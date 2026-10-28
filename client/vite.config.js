@@ -6,4 +6,8 @@ export default defineConfig({
   server: {
     allowedHosts: ["www.cbcstryi.top", "cbcstryi.top", "cbc-oman.onrender.com"],
   },
+  preview: {
+    host: "0.0.0.0",
+    allowedHosts: ["www.cbcstryi.top", "cbcstryi.top", "cbc-oman.onrender.com"],
+  },
 });
