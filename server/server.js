@@ -45,7 +45,11 @@ if (!fs.existsSync(uploadDir)) {
 // CORS
 app.use(
   cors({
-    origin: ["https://www.cbcstryi.top", "https://cbcstryi.top"],
+    origin: [
+      "https://www.cbcstryi.top",
+      "https://cbcstryi.top",
+      "https://cbc-oman.onrender.com",
+    ],
     credentials: true,
   }),
 );
