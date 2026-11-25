@@ -177,10 +177,12 @@ const AdminOrders = () => {
   };
 
   const handleDownload = (file) => {
-    const baseURL = import.meta.env.VITE_API_URL;
-    const fileUrl = file.path
-      ? `${baseURL}/${file.path}`
-      : `${baseURL}/uploads/${file.filename}`;
+    const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
+    const fileUrl = file.path?.startsWith("http")
+      ? file.path
+      : `${baseURL}/uploads/${encodeURIComponent(file.filename)}`;
+
     window.open(fileUrl, "_blank");
   };
 
