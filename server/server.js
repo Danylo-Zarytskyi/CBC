@@ -76,6 +76,11 @@ app.use("/api/popular-services", popularServicesRoute);
 app.use("/api/works", workRoute);
 app.use("/api/hero", heroRoute);
 
+// HEALTH CHECK (для UptimeRobot)
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
 // 404
 app.use("*", (req, res) => {
   res.status(404).json({ success: false, message: "Маршрут не знайдено" });
